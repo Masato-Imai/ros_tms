@@ -10,16 +10,34 @@
 <arg name="global_frame" value="map1"/>
 <arg name="odom_frame"   value="odom1"/>
 <arg name="base_frame"   value="base_footprint1"/>
-<!-- <arg name="scan_frame"   value="base_scan1"/> -->
+<arg name="scan_frame"   value="base_scan1"/>
 
 <!-- map file -->
 <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/>
+<!-- <arg name="map_file" value="$(find tms_ss_ninebot_pozyx)/maps/huistenbosch_windmill/map.yaml"/> -->
 
 <!-- RViz -->
 <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz_cfg.rviz" respawn="true"/>
 
+<!-- Pozyx -->
+<arg name="use_pozyx" default="false"/>
+<group if="$(arg use_pozyx)">
+  <!-- Pozyx_Kalman -->
+  <!-- <node name="pozyx_kalman" pkg="tms_ss_ninebot_pozyx" type="pozyx_kalman" output="screen"/> -->
+
+    <!-- Filterかけてない -->
+  <node name="pozyx" pkg="tms_ss_ninebot_pozyx" type="pozyx_serial">
+    <param name="port" value="/dev/ttyACM0"/>
+  </node>
+
+  <!-- Pozyx Visualize  -->
+  <node name="pozyx_visualize" pkg="tms_ss_ninebot_pozyx" type="visualize.py"/>
+</group>
+
+
 <!-- Static TF -->
 <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 world_link map 100" /> -->
+
 
 <group ns="portable1">
 
@@ -37,9 +55,9 @@
     args="0 0 0 0 0 0 $(arg global_frame) base_measured 100">
   </node>
 
-  <!-- <node pkg="tf" type="static_transform_publisher" name="foot_to_scan"
+  <node pkg="tf" type="static_transform_publisher" name="foot_to_scan"
     args="0.1 0 0.36 0 0 0 $(arg base_frame) $(arg scan_frame) 100">
-  </node> -->
+  </node>
   
   <!-- move base -->
   <arg name="move_base" default="true"/>
@@ -66,6 +84,14 @@
     <remap from="~input/cmd_vel" to="cmd_vel_smoother"/>
     <remap from="~input/safety"  to="safety_twist"/>
     <remap from="~output"        to="mux_twist"/>
+  </node>
+
+  <!-- portable laser -->
+  <node pkg="tms_rc_rtkbot" type="portable_laser" name="portable_laser" output="screen">
+    <param name="input_scan_name"  value="urg_scan"/>
+    <param name="output_scan_name" value="scan"/>
+    <param name="range_min"        value="0.1"/>
+    <param name="range_max"        value="20"/>
   </node>
 
   <!-- portable position -->
@@ -130,6 +156,28 @@
     <param name="base_link_frame"   value="$(arg base_frame)"/>
     <param name="world_frame"       value="$(arg global_frame)"/>
   </node>
+
+  <!-- Wii Remote -->
+  <arg name="use_wii_remote" default="false"/>
+  <group if="$(arg use_wii_remote)">
+
+  <!-- portable wiiremote -->
+  <node pkg="tms_rc_rtkbot" type="portable_wiiremote" name="portable_wiiremote" output="screen">
+    <param name="cmd_vel_topic" value="wii_cmd"/>
+    <param name="linear_active" value="false"/>
+    <param name="max_rot_vel"   value="0.15"/>
+  </node>
+
+  <!-- portable smoother remote -->
+  <node pkg="tms_rc_rtkbot" type="portable_smoother" name="portable_smoother_remote" output="screen">
+    <param name="input_topic_name"  value="wii_cmd"/>
+    <param name="output_topic_name" value="remote"/>
+    <param name="acc_lim_th"        value="3.0"/>
+    <param name="time_out"          value="0.5"/>
+    <param name="ignore_stop"       value="true"/>
+  </node>
+  
+  </group>
 
 </group>
 </launch>

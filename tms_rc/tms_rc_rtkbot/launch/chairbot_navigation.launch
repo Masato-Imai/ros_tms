@@ -86,7 +86,7 @@
     <param name="odom_topic_name" value="/portable1/odom"/>
     <param name="global_frame_id" value="$(arg global_frame)"/>
     <param name="base_frame_id"   value="$(arg base_frame)"/>
-    <param name="marker_name"     value="ninebot"/>
+    <param name="marker_name"     value="chairbot"/>
     <param name="print_marker"    value="true"/>
   </node>
 

@@ -11,7 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   nav_msgs
   visualization_msgs
-  ublox_msgs
+  
+  ## ublox_msgs
 )
 
 find_package(Boost REQUIRED COMPONENTS thread)

@@ -5,7 +5,7 @@ import tf
 import sys
 import time
 import thread
-import wiringpi2
+#import wiringpi2
 
 from std_msgs.msg       import Float64
 from std_srvs.srv       import Empty
@@ -15,6 +15,7 @@ from geometry_msgs.msg  import PoseWithCovarianceStamped
 from actionlib_msgs.msg import GoalID
 from actionlib_msgs.msg import GoalStatusArray
 
+'''
 class LedControlClass:
   def __init__(self):
     self.pins = [2, 7, 3] #GPIO
@@ -29,13 +30,14 @@ class LedControlClass:
     wiringpi2.digitalWrite(self.pins[0], self.ryb[0])
     wiringpi2.digitalWrite(self.pins[1], self.ryb[1])
     wiringpi2.digitalWrite(self.pins[2], self.ryb[2])
+'''
 
 class IndicatorClass:
   def __init__(self):
     rospy.on_shutdown(self.shutdown)
 
     self.goal = PoseStamped()
-    self.leds = LedControlClass()
+    #self.leds = LedControlClass()
 
     self.pre_status = 0
 
@@ -51,9 +53,9 @@ class IndicatorClass:
     rospy.Subscriber('move_base/status', GoalStatusArray, self.callback_status, queue_size=1)
 
     rate = rospy.Rate(3)
-    self.leds.ryb = [0, 0, 1]
+    #self.leds.ryb = [0, 0, 1]
     while not rospy.is_shutdown():
-      self.leds.update()
+      #self.leds.update()
       rate.sleep()
 
   def callback_status(self, data):
@@ -64,16 +66,17 @@ class IndicatorClass:
     if (status == 3) and (self.pre_status != 3): #ゴールしたときに音を出す
       self.sound_pub.publish(1.0)    
     
-    if   status == 0: self.leds.ryb = [0, 0, 1] #pending
-    elif status == 1: self.leds.ryb = [0, 1, 0] #active
-    elif status == 2: self.leds.ryb = [0, 0, 1] #preempted
-    elif status == 3: self.leds.ryb = [1, 1, 1] #succeeded
-    elif status == 4:                           #aborted
-      self.leds.ryb = [1, 0, 0]
+    #if   status == 0: self.leds.ryb = [0, 0, 1] #pending
+    #elif status == 1: self.leds.ryb = [0, 1, 0] #active
+    #elif status == 2: self.leds.ryb = [0, 0, 1] #preempted
+    #elif status == 3: self.leds.ryb = [1, 1, 1] #succeeded
+    #elif status == 4:                           #aborted
+    if status == 4:
+      #self.leds.ryb = [1, 0, 0]
       self.clear_costmaps()
       self.goal_pub.publish(self.goal)
       self.sound_pub.publish(0.5)
-    else: self.leds.ryb = [1, 0, 1]
+    #else: self.leds.ryb = [1, 0, 1]
 
     self.pre_status = status
 
@@ -85,8 +88,8 @@ class IndicatorClass:
 
   def shutdown(self):
     try:
-      for x in self.leds.pins:
-        wiringpi2.digitalWrite(x, 0)
+      #for x in self.leds.pins:
+        #wiringpi2.digitalWrite(x, 0)
       self.cancel_pub.publish(GoalID())
     except: pass
 
