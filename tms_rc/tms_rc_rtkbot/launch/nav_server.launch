@@ -72,14 +72,9 @@
     <param name="print_marker"    value="true"/>
   </node>
 
-  <!-- portable measured -->
-  <node pkg="tms_rc_rtkbot" type="portable_measured" name="portable_measured" output="screen">
-    <param name="people_topic_name"       value="/people_ninebot_cropped"/>
-    <param name="measured_in_topic_name"  value="/ninebot_measured_pos"/>
-    <param name="measured_out_topic_name" value="odometry/measured"/>
-    <param name="global_frame_id"         value="$(arg global_frame)"/>
-    <param name="people_frame_id"         value="$(arg global_frame)"/>
-    <param name="measured_frame_id"       value="base_measured"/>
+  <!-- rtkgps measured -->
+  <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
+    <param name="out_topic_name" value="odometry/measured"/>
   </node>
 
   <!-- portable smoother cmd-->
