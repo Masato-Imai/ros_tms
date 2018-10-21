@@ -75,6 +75,7 @@
   <!-- rtkgps measured -->
   <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
     <param name="out_topic_name" value="odometry/measured"/>
+    <param name="subscribe_float" value="false"/>
   </node>
 
   <!-- portable smoother cmd-->

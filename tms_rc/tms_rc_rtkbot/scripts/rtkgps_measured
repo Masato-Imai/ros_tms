@@ -10,6 +10,7 @@ class MeasuredDataClass:
   def __init__(self):
     
     out_topic_name = rospy.get_param('~out_topic_name', 'odometry/measured')
+    self.subscribe_float = rospy.get_param('~subscribe_float', False)
     self.gps_pub = rospy.Publisher(out_topic_name, Odometry, queue_size=10)
     rospy.Subscriber("ublox_gps/navrelposned", NavRELPOSNED, self.callback_gps, queue_size=10)   
 
@@ -27,7 +28,7 @@ class MeasuredDataClass:
     # odom.pose.pose.position.z = -(data.relPosD / 100.0)
     odom.pose.pose.orientation.w = 1.0
 
-    if data.flags == 23: # Fix Only
+    if (data.flags == 23) or (self.subscribe_float and data.flags == 15): # Fix or Float 
       self.gps_pub.publish(odom) 
 
 if __name__ == '__main__':
