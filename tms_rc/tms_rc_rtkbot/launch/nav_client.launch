@@ -8,7 +8,7 @@
 
   <!-- ninebot serial -->
   <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
-    <param name="port" value="/dev/ttyACM0"/>
+    <param name="port" value="/dev/nucleo"/>
   </node>
   
 </group>
@@ -16,7 +16,7 @@
 <!-- RTK-GPS -->
 <!-- <node pkg="ublox_gps" type="ublox_gps" name="ublox_gps" output="screen">
   <rosparam file="$(find tms_rc_rtkbot)/param/rover.yaml"/>
-  <param name="device"     value="/dev/ttyACM0"/>
+  <param name="device"     value="/dev/ttyACM1"/>
   <param name="frame_id"   value="rtk"/>
 </node> -->
 
