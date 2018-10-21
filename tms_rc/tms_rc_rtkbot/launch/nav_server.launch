@@ -10,15 +10,22 @@
 <arg name="global_frame" value="map1"/>
 <arg name="odom_frame"   value="odom1"/>
 <arg name="base_frame"   value="base_footprint1"/>
+<arg name="ned_frame"    value="ned1"/>
 
 <!-- map file -->
-<arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/>
+<!-- <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/> -->
+<arg name="map_file" value="$(find tms_rc_rtkbot)/maps/lib_to_conv/map.yaml"/>
 
 <!-- RViz -->
 <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz_cfg.rviz" respawn="true"/>
 
 <!-- Static TF -->
 <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 world_link map 100" /> -->
+
+<!-- TF -->
+<node pkg="tf2_ros" type="static_transform_publisher" name="map_to_ned"
+  args="0.0 0.0 0.0 -1.6667933537401 3.14159 0.0 $(arg global_frame) $(arg ned_frame)">
+</node>
 
 <group ns="portable1">
 
@@ -75,7 +82,10 @@
   <!-- rtkgps measured -->
   <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
     <param name="out_topic_name" value="odometry/measured"/>
-    <param name="subscribe_float" value="false"/>
+    <param name="sel_solutions" value="all"/>
+    <param name="ned_frame"   value="$(arg ned_frame)"/>
+    <param name="odom_frame"   value="$(arg odom_frame)"/>
+    <param name="base_frame"   value="$(arg base_frame)"/>
   </node>
 
   <!-- portable smoother cmd-->
