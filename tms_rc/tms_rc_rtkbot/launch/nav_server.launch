@@ -13,8 +13,8 @@
 <arg name="ned_frame"    value="ned1"/>
 
 <!-- map file -->
-<!-- <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/> -->
-<arg name="map_file" value="$(find tms_rc_rtkbot)/maps/lib_to_conv/map.yaml"/>
+<arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_100x100/map.yaml"/>
+<!-- <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/lib_to_conv/map.yaml"/> -->
 
 <!-- RViz -->
 <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz_cfg.rviz" respawn="true"/>
@@ -23,9 +23,9 @@
 <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 world_link map 100" /> -->
 
 <!-- TF -->
-<node pkg="tf2_ros" type="static_transform_publisher" name="map_to_ned"
+<!-- <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_ned"
   args="0.0 0.0 0.0 -1.6667933537401 3.14159 0.0 $(arg global_frame) $(arg ned_frame)">
-</node>
+</node> -->
 
 <group ns="portable1">
 
