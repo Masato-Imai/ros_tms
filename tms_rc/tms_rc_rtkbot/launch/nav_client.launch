@@ -8,6 +8,7 @@
 
   <!-- ninebot serial -->
   <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
+    <!-- <param name="port" value="/dev/ttyACM0"/> -->
     <param name="port" value="/dev/nucleo"/>
   </node>
   
