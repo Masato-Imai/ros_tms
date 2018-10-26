@@ -1,4 +1,7 @@
 <launch>
+    <arg name="unit_test" default="true"/>
+    <group if="$(arg unit_test)">
+
     <arg name="publish_nmea_sentence" default="true"/>
     <group if="$(arg publish_nmea_sentence)">
         <!-- nmea_topic_serial_reader -->
@@ -15,6 +18,21 @@
         <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
             <param name="port" value="/dev/ublox"/>
         </node>
+    </group>
+
+    </group>
+
+    <group unless="$(arg unit_test)">
+        <!-- nmea_serial_driver -->
+        <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+            <param name="port" value="/dev/ublox"/>
+        </node>
+
+        <!-- nmea_measured -->
+        <node pkg="tms_rc_rtkbot" type="nmea_measured" name="nmea_measured" output="screen">
+            <param name="a" value="b"/>
+        </node>
+
     </group>
 
 </launch>
