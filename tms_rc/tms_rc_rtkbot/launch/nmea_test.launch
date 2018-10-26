@@ -1,0 +1,20 @@
+<launch>
+    <arg name="publish_nmea_sentence" default="true"/>
+    <group if="$(arg publish_nmea_sentence)">
+        <!-- nmea_topic_serial_reader -->
+        <node pkg="nmea_navsat_driver" type="nmea_topic_serial_reader" name="nmea_topic_serial_reader" output="screen">
+            <param name="port" value="/dev/ublox"/>
+        </node>
+        <!-- nmea_topic_driver -->
+        <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" output="screen">
+        </node>
+    </group>
+
+    <group unless="$(arg publish_nmea_sentence)">
+        <!-- nmea_serial_driver -->
+        <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+            <param name="port" value="/dev/ublox"/>
+        </node>
+    </group>
+
+</launch>
