@@ -30,9 +30,17 @@
 
         <!-- nmea_measured -->
         <node pkg="tms_rc_rtkbot" type="nmea_measured" name="nmea_measured" output="screen">
-            <param name="a" value="b"/>
+            <!-- Frame, Topic -->
+            <param name="map_frame_name" value="map"/>
+            <param name="odom_frame_name" value="odom"/>
+            <param name="out_topic_name" value="odometry/measured"/>
+            <!-- GNSS -->
+            <param name="origin_lat" value="33.599053"/>
+            <param name="origin_lon" value="130.211607"/>
+            <param name="angle_offset" value="0"/>
+            <param name="scale_offset" value="1"/>
+            <param name="sel_solutions" value="fix"/>
         </node>
-
     </group>
 
 </launch>
