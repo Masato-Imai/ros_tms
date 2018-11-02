@@ -76,10 +76,10 @@
   <!-- rtkgps_measured-->
   <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
     <!-- Frame, Topic -->
-    <param name="map_frame_name" value="$(arg global_frame)">
-    <param name="odom_frame_name" value="$(arg odom_frame)">
-    <param name="in_topic_name" value="/fix">
-    <param name="out_topic_name" value="odometry/measured">
+    <param name="map_frame_name" value="$(arg global_frame)"/>
+    <param name="odom_frame_name" value="$(arg odom_frame)"/>
+    <param name="in_topic_name" value="/fix"/>
+    <param name="out_topic_name" value="odometry/measured"/>
     <!-- GNSS Configuration -->
     <param name="origin_lat" value="33.599053"/>
     <param name="origin_lon" value="130.211607"/>
