@@ -19,4 +19,7 @@ SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a8", SYMLINK+="u
 (詳しくは[Qiita](https://qiita.com/caad1229/items/309be550441515e185c0)などを参考に)
 
 ## 必要なパッケージ
+### aptで入手
+- ros-kinetic-nmea-msgs
+### GitHubでCloneする
 - ros-kinetic-nmea-navsat-driver
