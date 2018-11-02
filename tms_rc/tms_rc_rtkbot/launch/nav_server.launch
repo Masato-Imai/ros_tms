@@ -10,7 +10,6 @@
 <arg name="global_frame" value="map1"/>
 <arg name="odom_frame"   value="odom1"/>
 <arg name="base_frame"   value="base_footprint1"/>
-<arg name="ned_frame"    value="ned1"/>
 
 <!-- map file -->
 <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_100x100/map.yaml"/>
@@ -21,11 +20,6 @@
 
 <!-- Static TF -->
 <!-- <node pkg="tf" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 world_link map 100" /> -->
-
-<!-- TF -->
-<!-- <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_ned"
-  args="0.0 0.0 0.0 -1.6667933537401 3.14159 0.0 $(arg global_frame) $(arg ned_frame)">
-</node> -->
 
 <group ns="portable1">
 
@@ -79,13 +73,19 @@
     <param name="print_marker"    value="true"/>
   </node>
 
-  <!-- rtkgps measured -->
+  <!-- rtkgps_measured-->
   <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
-    <param name="out_topic_name" value="odometry/measured"/>
-    <param name="sel_solutions" value="all"/>
-    <param name="ned_frame"   value="$(arg ned_frame)"/>
-    <param name="odom_frame"   value="$(arg odom_frame)"/>
-    <param name="base_frame"   value="$(arg base_frame)"/>
+    <!-- Frame, Topic -->
+    <param name="map_frame_name" value="$(arg global_frame)">
+    <param name="odom_frame_name" value="$(arg odom_frame)">
+    <param name="in_topic_name" value="/fix">
+    <param name="out_topic_name" value="odometry/measured">
+    <!-- GNSS Configuration -->
+    <param name="origin_lat" value="33.599053"/>
+    <param name="origin_lon" value="130.211607"/>
+    <param name="angle_offset" value="0"/>
+    <param name="scale_offset" value="1"/>
+    <param name="sel_solutions" value="fix"/>
   </node>
 
   <!-- portable smoother cmd-->

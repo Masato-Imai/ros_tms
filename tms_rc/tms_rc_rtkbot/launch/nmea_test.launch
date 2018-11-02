@@ -28,8 +28,8 @@
             <param name="port" value="/dev/ublox"/>
         </node>
 
-        <!-- nmea_measured -->
-        <node pkg="tms_rc_rtkbot" type="nmea_measured" name="nmea_measured" output="screen">
+        <!-- rtkgps_measured -->
+        <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
             <!-- Frame, Topic -->
             <param name="map_frame_name" value="map"/>
             <param name="odom_frame_name" value="odom"/>
