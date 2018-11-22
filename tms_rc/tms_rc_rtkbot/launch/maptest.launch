@@ -28,9 +28,9 @@
 </group>
 
 <!-- nmea_serial_driver -->
-<node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+<!-- <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
     <param name="port" value="/dev/ublox"/>
-</node>
+</node> -->
 
 <!-- rtkgps_measured -->
 <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
@@ -39,11 +39,11 @@
     <param name="odom_frame_name" value="odom"/>
     <param name="out_topic_name" value="odometry/measured"/>
     <!-- GNSS -->
-    <param name="origin_lat" value="33.598420"/>
-    <param name="origin_lon" value="130.210932"/>
-    <param name="angle_offset" value="0"/>
-    <param name="scale_offset" value="1"/>
-    <param name="sel_solutions" value="fix"/>
+    <param name="origin_lat" value="33.59842222"/>
+    <param name="origin_lng" value="130.210924990"/>
+    <param name="angle_offset" value="4.25"/>
+    <param name="scale_offset" value="0.965"/>
+    <param name="sel_solutions" value="all"/>
 </node>
 
 </launch>

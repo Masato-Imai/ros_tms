@@ -233,7 +233,7 @@ Visualization Manager:
       Name: Marker
       Namespaces:
         {}
-      Queue Size: 100
+      Queue Size: 114514
       Value: true
   Enabled: true
   Global Options:
@@ -259,26 +259,26 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Class: rviz/Orbit
-      Distance: 10.7901764
+      Class: rviz/ThirdPersonFollower
+      Distance: 56.3972244
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 27.7420444
-        Y: -22.2093716
-        Z: 83.2680893
+        X: 6.38210487
+        Y: -19.8940544
+        Z: 0
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.55979633
+      Pitch: 1.26979661
       Target Frame: <Fixed Frame>
-      Value: Orbit (rviz)
-      Yaw: 4.69038153
+      Value: ThirdPersonFollower (rviz)
+      Yaw: 5.30532312
     Saved: ~
 Window Geometry:
   Displays:

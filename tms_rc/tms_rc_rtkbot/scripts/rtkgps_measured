@@ -3,6 +3,7 @@
 
 import rospy
 import math
+import pyproj
 
 from sensor_msgs.msg import NavSatFix
 from nav_msgs.msg           import Odometry
@@ -23,7 +24,7 @@ class MeasuredDataClass:
     # Get Params
     self.earth_radius = rospy.get_param('~earth_radius', 6378.137)
     self.origin_lat   = rospy.get_param('~origin_lat', 0.)
-    self.origin_lon   = rospy.get_param('~origin_lon', 0.)
+    self.origin_lng   = rospy.get_param('~origin_lng', 0.)
     self.angle_offset = rospy.get_param('~angle_offset', 0.) * math.pi / 180.0
     self.scale_offset = rospy.get_param('~scale_offset', 1.)
     self.sel_solutions = rospy.get_param('~sel_solutions', "fix")
@@ -48,20 +49,27 @@ class MeasuredDataClass:
     self.marker.scale.y         = 0.2
     self.marker.scale.z         = 1.0
     self.marker.color.a         = 1.0
-    self.marker.lifetime        = rospy.Duration(1.0)
+    self.marker.id              = 0
+    self.marker.lifetime        = rospy.Duration(0)
 
-  def _latlon2xy(self, lat, lon): # lat: NS lon: EW
-    x = self.earth_radius * (math.radians(lon) - math.radians(self.origin_lon)) * 1000.0
-    y = self.earth_radius * (math.radians(lat) - math.radians(self.origin_lat)) * 1000.0
-    tx = math.cos(self.angle_offset) * x - math.sin(self.angle_offset) * y
-    ty = math.sin(self.angle_offset) * x + math.cos(self.angle_offset) * y
-    ret_x = tx * self.scale_offset
-    ret_y = ty * self.scale_offset
-    return ret_x, ret_y
+  def _latlng2xy(self, lng, lat):
+
+    wgs84 = pyproj.Proj(init='EPSG:4326') # WGS84 緯度経度 (測地系)
+    rect6 = pyproj.Proj(init='EPSG:2444') # 平面直角座標系 (座標系) 場所によってEPSGコードを変更する必要あり
+
+    x_origin, y_origin = pyproj.transform(wgs84, rect6, self.origin_lng, self.origin_lat) # Map原点の座標
+    x_target, y_target = pyproj.transform(wgs84, rect6, lng, lat) # 測位している点   
+
+    tx = math.cos(self.angle_offset) * (x_target - x_origin) - math.sin(self.angle_offset) * (y_target - y_origin)
+    ty = math.sin(self.angle_offset) * (x_target - x_origin) + math.cos(self.angle_offset) * (y_target - y_origin)
+
+    x = tx * self.scale_offset
+    y = ty * self.scale_offset
+    return x, y
 
   def callback_gps(self, data):
 
-    x, y = self._latlon2xy(data.latitude, data.longitude) # Converted Coordinates
+    x, y = self._latlng2xy(data.longitude, data.latitude) # Converted Coordinates
 
     # Set Odom Topic
     odom                      = Odometry()
@@ -87,6 +95,7 @@ class MeasuredDataClass:
     self.marker.header.stamp = rospy.Time.now()
     self.marker.pose.position    = odom.pose.pose.position
     self.marker.pose.orientation = odom.pose.pose.orientation
+    self.marker.id += 1
     
     if data.status.status == self.navsat_status.get('fix'): # Fix: Blue
       self.marker.color.r = 0.0
