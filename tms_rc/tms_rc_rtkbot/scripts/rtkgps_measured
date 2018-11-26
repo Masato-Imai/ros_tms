@@ -22,7 +22,6 @@ class MeasuredDataClass:
     self.odom_frame = rospy.get_param('~odom_frame_name', 'odom')
 
     # Get Params
-    self.earth_radius = rospy.get_param('~earth_radius', 6378.137)
     self.origin_lat   = rospy.get_param('~origin_lat', 0.)
     self.origin_lng   = rospy.get_param('~origin_lng', 0.)
     self.angle_offset = rospy.get_param('~angle_offset', 0.) * math.pi / 180.0
@@ -32,14 +31,14 @@ class MeasuredDataClass:
     # GPS
     in_topic_name = rospy.get_param('~in_topic_name', '/fix')
     out_topic_name = rospy.get_param('~out_topic_name', 'odometry/measured')
-    self.gps_pub = rospy.Publisher(out_topic_name, Odometry, queue_size=10)
-    rospy.Subscriber(in_topic_name, NavSatFix, self.callback_gps, queue_size=10)
+    self.gps_pub = rospy.Publisher(out_topic_name, Odometry, queue_size=100)
+    rospy.Subscriber(in_topic_name, NavSatFix, self.callback_gps, queue_size=100)
     self.navsat_status = {'fix': 3, 'float': 2} # User Defined
 
     # Marker
     self.marker = Marker()
     self._init_marker()
-    self.marker_pub = rospy.Publisher('/gps_marker', Marker, queue_size=10)
+    self.marker_pub = rospy.Publisher('/gps_marker', Marker, queue_size=100)
 
   def _init_marker(self):
     self.marker.header.frame_id = 'world_link'

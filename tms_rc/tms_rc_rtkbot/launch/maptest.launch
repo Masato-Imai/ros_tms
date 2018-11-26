@@ -9,7 +9,7 @@
   <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/ito_parking/map.yaml"/>
 
   <!-- RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz_cfg.rviz" respawn="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/maptest.rviz" respawn="true"/>
 
 <group ns="portable1">
   <!-- map server -->
@@ -35,14 +35,14 @@
 <!-- rtkgps_measured -->
 <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
     <!-- Frame, Topic -->
-    <param name="map_frame_name" value="map"/>
-    <param name="odom_frame_name" value="odom"/>
+    <param name="map_frame_name" value="$(arg global_frame)"/>
+    <param name="odom_frame_name" value="$(arg odom_frame)"/>
     <param name="out_topic_name" value="odometry/measured"/>
     <!-- GNSS -->
     <param name="origin_lat" value="33.59842222"/>
     <param name="origin_lng" value="130.210924990"/>
-    <param name="angle_offset" value="4.25"/>
-    <param name="scale_offset" value="0.965"/>
+    <param name="angle_offset" value="1"/>
+    <param name="scale_offset" value="1.005441538915930643323"/>
     <param name="sel_solutions" value="all"/>
 </node>
 
