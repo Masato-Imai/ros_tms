@@ -70,7 +70,7 @@ Visualization Manager:
       Marker Topic: /gps_marker
       Name: Marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
@@ -98,25 +98,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/ThirdPersonFollower
-      Distance: 37.216774
+      Distance: 46.0124588
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 35.7552109
-        Y: -59.7266617
+        X: 22.3267441
+        Y: -39.3696938
         Z: 0
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.45479643
+      Pitch: 0.769796908
       Target Frame: <Fixed Frame>
       Value: ThirdPersonFollower (rviz)
-      Yaw: 1.58223081
+      Yaw: 5.32541466
     Saved: ~
 Window Geometry:
   Displays:

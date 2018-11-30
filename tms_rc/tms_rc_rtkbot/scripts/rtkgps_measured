@@ -4,6 +4,7 @@
 import rospy
 import math
 import pyproj
+import numpy as np
 
 from sensor_msgs.msg import NavSatFix
 from nav_msgs.msg           import Odometry
@@ -53,18 +54,20 @@ class MeasuredDataClass:
 
   def _latlng2xy(self, lng, lat):
 
-    wgs84 = pyproj.Proj(init='EPSG:4326') # WGS84 緯度経度 (測地系)
-    rect6 = pyproj.Proj(init='EPSG:2444') # 平面直角座標系 (座標系) 場所によってEPSGコードを変更する必要あり
+    wgs84 = pyproj.Proj(init='EPSG:4326')  # WGS84 緯度経度 (測地系)
+    rect6 = pyproj.Proj(init='EPSG:2444')  # 平面直角座標系 (座標系) 場所によって変更する必要あり
 
-    x_origin, y_origin = pyproj.transform(wgs84, rect6, self.origin_lng, self.origin_lat) # Map原点の座標
-    x_target, y_target = pyproj.transform(wgs84, rect6, lng, lat) # 測位している点   
+    origin_X, origin_Y = pyproj.transform(wgs84, rect6, self.origin_lng, self.origin_lat)  # Map原点の座標
+    target_X, target_Y = pyproj.transform(wgs84, rect6, lng, lat)  # 測位している点
 
-    tx = math.cos(self.angle_offset) * (x_target - x_origin) - math.sin(self.angle_offset) * (y_target - y_origin)
-    ty = math.sin(self.angle_offset) * (x_target - x_origin) + math.cos(self.angle_offset) * (y_target - y_origin)
+    rel_XY = np.array([target_X - origin_X, target_Y - origin_Y])  # Map原点からの相対座標
 
-    x = tx * self.scale_offset
-    y = ty * self.scale_offset
-    return x, y
+    rot = np.array([[np.cos(self.angle_offset), -np.sin(self.angle_offset)],
+                    [np.sin(self.angle_offset), np.cos(self.angle_offset)]])
+    
+    ret_XY = np.dot(rot, rel_XY) * self.scale_offset
+
+    return ret_XY[0], ret_XY[1]
 
   def callback_gps(self, data):
 
