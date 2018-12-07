@@ -39,10 +39,10 @@
     <param name="odom_frame_name" value="$(arg odom_frame)"/>
     <param name="out_topic_name" value="odometry/measured"/>
     <!-- GNSS -->
-    <param name="origin_lat" value="33.59842222"/>
-    <param name="origin_lng" value="130.210924990"/>
-    <param name="angle_offset" value="1"/>
-    <param name="scale_offset" value="1.005441538915930643323"/>
+    <param name="origin_lat" value="33.598425"/>
+    <param name="origin_lng" value="130.210837"/>
+    <param name="angle_offset" value="1.5"/>
+    <!--<param name="scale_offset" value="1.005441538915930643323"/>-->
     <param name="sel_solutions" value="all"/>
 </node>
 
