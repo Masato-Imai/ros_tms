@@ -9,7 +9,7 @@
   <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/ito_parking/map.yaml"/>
 
   <!-- RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/maptest.rviz" respawn="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz/maptest.rviz" respawn="true"/>
 
 <group ns="portable1">
   <!-- map server -->

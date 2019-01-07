@@ -10,7 +10,7 @@
   <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_100x100/map.yaml"/>
 
   <!-- RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz_cfg.rviz" respawn="true"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz/rviz_cfg.rviz" respawn="true"/>
 
 <group ns="portable1">
   <!-- map server -->

@@ -21,5 +21,7 @@ SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a8", SYMLINK+="u
 ## 必要なパッケージ
 ### aptで入手
 - ros-kinetic-nmea-msgs
-### GitHubでCloneする
+### GitHubから入手
 - ros-kinetic-nmea-navsat-driver
+### pipで入手
+- pyproj

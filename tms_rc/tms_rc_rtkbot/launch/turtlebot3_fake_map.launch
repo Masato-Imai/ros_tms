@@ -37,7 +37,7 @@
   </node>
 
   <!-- RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/turtlebot3_fake_map.rviz"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz/turtlebot3_fake_map.rviz"/>
 
   <!-- map server -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">

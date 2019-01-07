@@ -10,28 +10,22 @@ from sensor_msgs.msg import NavSatFix
 from nav_msgs.msg           import Odometry
 from visualization_msgs.msg import Marker
 
-class MeasuredDataClass:
+
+class RtkMeasuredClass:
   def __init__(self):
 
-    '''
-    self.ned_frame = rospy.get_param('~ned_frame', 'ned')
-    self.odom_frame = rospy.get_param('~odom_frame', 'odom')
-    self.base_frame = rospy.get_param('~base_frame', 'base_footprint')
-    '''
-
+    # Params
     self.map_frame = rospy.get_param('~map_frame_name', 'map')
     self.odom_frame = rospy.get_param('~odom_frame_name', 'odom')
-
-    # Get Params
-    self.origin_lat   = rospy.get_param('~origin_lat', 0.)
-    self.origin_lng   = rospy.get_param('~origin_lng', 0.)
+    self.origin_lat = rospy.get_param('~origin_lat', 0.)
+    self.origin_lng = rospy.get_param('~origin_lng', 0.)
     self.angle_offset = rospy.get_param('~angle_offset', 0.) * math.pi / 180.0
     self.scale_offset = rospy.get_param('~scale_offset', 1.)
     self.sel_solutions = rospy.get_param('~sel_solutions', "fix")
-
-    # GPS
     in_topic_name = rospy.get_param('~in_topic_name', '/fix')
     out_topic_name = rospy.get_param('~out_topic_name', 'odometry/measured')
+
+    # Pub, Sub
     self.gps_pub = rospy.Publisher(out_topic_name, Odometry, queue_size=100)
     rospy.Subscriber(in_topic_name, NavSatFix, self.callback_gps, queue_size=100)
     self.navsat_status = {'fix': 3, 'float': 2} # User Defined
@@ -76,12 +70,6 @@ class MeasuredDataClass:
     # Set Odom Topic
     odom                      = Odometry()
     odom.header.stamp         = rospy.Time.now()
-
-    '''
-    odom.header.frame_id      = self.ned_frame
-    odom.child_frame_id       = self.odom_frame
-    '''
-
     odom.header.frame_id      = self.map_frame
     odom.child_frame_id       = self.odom_frame
 
@@ -136,7 +124,7 @@ class MeasuredDataClass:
 if __name__ == '__main__':
   rospy.init_node('rtkgps_measured', anonymous=True)
   try:
-    MeasuredDataClass()
+    RtkMeasuredClass()
     rospy.spin()
   except rospy.ROSInterruptException:
     rospy.loginfo("rtkgps_measured node finished.")
