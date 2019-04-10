@@ -1,0 +1,6 @@
+<launch>
+    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+        <param name="port" value="/dev/iodata_ser2usb"/>
+        <param name="baud" value="115200"/>
+    </node>
+</launch>
