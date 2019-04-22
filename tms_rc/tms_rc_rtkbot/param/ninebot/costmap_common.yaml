@@ -14,11 +14,25 @@ obstacle_layer:
   z_voxels:              2        # ボクセルのレイヤー数
   unknown_threshold:     15
   publish_voxel_map:     false
-  observation_sources:   scan
+  observation_sources: velodyne_points
+#  observation_sources:   scan
 
+'''
+# UTM-30LX-EW
   scan:
     data_type:           LaserScan
-    topic:               hogehoge # LRF: scan
+    topic:               scan # LRF: scan
+    marking:             true     # マップへの障害物挿入に利用
+    clearing:            true     # マップの障害物除去に利用
+    min_obstacle_height: 0.0      # これより高さの低い観測点は排除，デフォルトで0.0
+    max_obstacle_height: 2.0      # これより高さの高い観測点は排除，デフォルトで2.0
+    inf_is_valid:        true
+'''
+# Underconstruction
+# VLP-16
+  velodyne_points:
+    data_type:           PointCloud2
+    topic:               velodyne_points
     marking:             true     # マップへの障害物挿入に利用
     clearing:            true     # マップの障害物除去に利用
     min_obstacle_height: 0.0      # これより高さの低い観測点は排除，デフォルトで0.0

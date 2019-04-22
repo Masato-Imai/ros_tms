@@ -131,8 +131,6 @@
     <param name="world_frame"       value="$(arg global_frame)"/>
   </node>
 
-
-
 </group>
 </launch>
 
