@@ -21,6 +21,6 @@
     </node>
 
 <!-- Velodyne VLP-16 -->
-  <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch">
+  <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
   
 </launch>
