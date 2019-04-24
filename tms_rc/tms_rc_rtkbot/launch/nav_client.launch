@@ -3,7 +3,7 @@
 <group ns="portable1">
 
   <!-- portable indicator -->
-  <node pkg="tms_rc_rtkbot" type="portable_indicator" name="portable_indicator" output="screen" />
+  <node pkg="tms_rc_rtkbot" type="portable_indicator" name="portable_indicator" output="screen" +/>
 
   <!-- ninebot serial -->
   <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
@@ -16,7 +16,8 @@
 <!-- RTK-GPS -->
   <!-- nmea_serial_driver -->
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
-      <param name="port" value="/dev/ublox"/>
+      <param name="port" value="/dev/usb_rsaq5"/>
+      <param name="baud" value="115200">
     </node>
 
 <!-- Velodyne VLP-16 -->
