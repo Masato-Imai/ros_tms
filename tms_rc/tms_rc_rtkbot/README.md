@@ -11,6 +11,7 @@ sudo gpasswd -a ユーザ名 dialout
 - /etc/udev/rules.d/99-serial.rulesを作成し，以下の内容を記述
 ~~~
 SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="374b", SYMLINK+="nucleo", MODE="0666"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="04bb", ATTRS{idProduct}=="0a0e", SYMLINK+="usb_rsaq5", MODE="0666"
 SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a8", SYMLINK+="ublox", MODE="0666"
 ~~~
 
