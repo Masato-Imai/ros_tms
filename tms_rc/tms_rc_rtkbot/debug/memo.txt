@@ -1,0 +1,12 @@
+* socatによるnucleoのエミュレーション
+
+1. 仮想シリアルポートの作成
+$ socat -d -d pty,raw,b115200,echo=0 pty,raw,b115200,echo=0
+
+2. 生成されたポートの確認
+/dev/pts/*
+
+3. nucleo_emulator内でどちらかのポートを指定して実行
+
+4. ninebot_serial(受信側)を実行 (ポートは3で使っていない方)
+$ rosrun tms_rc_rtkbot ninebot_serial _port:=/dev/pts/**
