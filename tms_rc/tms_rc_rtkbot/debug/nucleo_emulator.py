@@ -1,14 +1,22 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
+import sys
 import serial
 import time
 
 ser = serial.Serial()
-ser.port = '/dev/pts/5'
 ser.baudrate = 115200
+ser.port = '/dev/pts/'
+
+if(len(sys.argv) == 2):
+    ser.port += sys.argv[1]
+else:
+    print("[Error]: Expected Port Number")
+    sys.exit(1)
 
 ser.open()
+print("Opened " + ser.port)
 t1 = time.time()
 
 try:

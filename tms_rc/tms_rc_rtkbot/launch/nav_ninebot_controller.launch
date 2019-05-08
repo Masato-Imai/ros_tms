@@ -45,24 +45,29 @@
 
 <!-- @ External I/O @ -->
     <!-- RTK-GNSS -->
-    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
-    <param name="port" value="/dev/usb_rsaq5"/>
-    <param name="baud" value="115200"/>
-    </node>
+    <arg name="use_RTK-GNSS" value="true"/>
+    <group if="$(arg use_RTK-GNSS)">
+        <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+        <param name="port" value="/dev/usb_rsaq5"/>
+        <param name="baud" value="115200"/>
+        </node>
+    </group>
 
     <!-- Velodyne VLP-16 -->
-
-    <!-- @ToDo -->
-    <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>    
-    <!-- @ToDo -->
-
-    <!-- Portable Indicator -->
-    <node pkg="tms_rc_rtkbot" type="portable_indicator" name="portable_indicator" output="screen"/>
+    <arg name="use_Velodyne" value="true"/>
+    <group if="$(arg use_Velodyne)">
+        <!-- @ToDo -->
+        <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>    
+        <!-- @ToDo -->
+    </group>
 
     <!-- Ninebot Serial -->
-    <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
-    <param name="port" value="/dev/nucleo"/>
-    </node>
+    <arg name="use_Ninebot_Serial" value="true"/>
+    <group if="$(arg use_Ninebot_Serial)">
+        <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
+        <param name="port" value="/dev/nucleo"/>
+        </node>
+    </group>
 
 <!-- @ Move Base @ -->
     <arg name="move_base" default="true"/>
@@ -116,6 +121,9 @@
     <param name="cmd_vel_topic"   value="cmd_vel"/>
     <param name="odom_topic_name" value="odometry/wheel"/>
     </node>
+
+<!-- @ Portable Indicator @ -->
+    <node pkg="tms_rc_rtkbot" type="portable_indicator" name="portable_indicator" output="screen"/>
 
 <!-- @ Ninebot Controller @ -->
     <node pkg="tms_rc_rtkbot" type="ninebot_controller" name="ninebot_controller" output="screen">
