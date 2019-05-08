@@ -37,11 +37,9 @@
     args="0 0 0 0 0 0 $(arg global_frame) base_measured 100">
     </node>
 
-    <!-- @ToDo -->
     <node pkg="tf" type="static_transform_publisher" name="foot_to_scan"
-    args="0.1 0 0.36 0 0 0 $(arg base_frame) $(arg scan_frame) 100">
+    args="0.1 0 0.36 -45 0 0 $(arg base_frame) $(arg scan_frame) 100">
     </node>
-    <!-- @ToDo -->
 
 <!-- @ External I/O @ -->
     <!-- RTK-GNSS -->
@@ -56,9 +54,8 @@
     <!-- Velodyne VLP-16 -->
     <arg name="use_Velodyne" value="true"/>
     <group if="$(arg use_Velodyne)">
-        <!-- @ToDo -->
-        <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>    
-        <!-- @ToDo -->
+        <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
+        <arg name="calibration" default="/home/joule/VLP16-HiRes.yaml"/>    
     </group>
 
     <!-- Ninebot Serial -->
