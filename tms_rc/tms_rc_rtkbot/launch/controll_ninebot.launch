@@ -8,10 +8,10 @@
     <arg name="initial_state" value="[$(arg initialpose_x), $(arg initialpose_y), 0, 0, 0, $(arg initialpose_a), 0, 0, 0, 0, 0, 0, 0, 0, 0]"/>
 
     <!-- frame name -->
-    <arg name="global_frame" value="map1"/>
-    <arg name="odom_frame"   value="odom1"/>
-    <arg name="base_frame"   value="base_footprint1"/>
-    <arg name="scan_frame"   value="base_scan1"/>
+    <arg name="global_frame" value="map"/>
+    <arg name="odom_frame"   value="odom"/>
+    <arg name="base_frame"   value="base_footprint"/>
+    <arg name="scan_frame"   value="base_scan"/>
 
     <!-- map file -->
     <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/> 
@@ -29,16 +29,20 @@
     </node>
 
 <!-- @ Static TF @ -->
-    <node pkg="tf" type="static_transform_publisher" name="world_to_map"
-    args="0 0 0 0 0 0 world_link $(arg global_frame) 100">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_map"
+    args="0 0 0 0 0 0 world_link $(arg global_frame)">
     </node>
 
-    <node pkg="tf" type="static_transform_publisher" name="map_to_measured"
-    args="0 0 0 0 0 0 $(arg global_frame) base_measured 100">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_measured"
+    args="0 0 0 0 0 0 $(arg global_frame) base_measured">
     </node>
 
-    <node pkg="tf" type="static_transform_publisher" name="foot_to_scan"
-    args="0.1 0 0.36 -45 0 0 $(arg base_frame) $(arg scan_frame) 100">
+    <node pkg="tf2_ros" type="static_transform_publisher" name="foot_to_scan"
+    args="0.1 0 0.36 -45 0 0 $(arg base_frame) $(arg scan_frame)">
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne"
+    args="0 0 0 0 0 0 $(arg scan_frame) velodyne">
     </node>
 
 <!-- @ External I/O @ -->
@@ -52,11 +56,10 @@
     </group>
 
     <!-- Velodyne VLP-16 -->
-    <arg name="use_Velodyne" value="false"/>
+    <arg name="use_Velodyne" value="true"/>
     <group if="$(arg use_Velodyne)">
         <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
-        <arg name="calibration" value="/home/joule/VLP16-HiRes.yaml"/>
-        <!-- <arg name="frame_id" value="$(arg scan_frame)"/>  -->
+        <arg name="calibration" value="$(env HOME)/VLP16-HiRes.yaml"/>
     </group>
 
     <!-- Ninebot Serial -->
