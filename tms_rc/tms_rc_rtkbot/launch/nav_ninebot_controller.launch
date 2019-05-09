@@ -14,7 +14,7 @@
     <arg name="scan_frame"   value="base_scan1"/>
 
     <!-- map file -->
-    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_100x100/map.yaml"/> 
+    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/> 
 
     <!-- GNSS -->
     <arg name="origin_lat" value="33.599053"/>
@@ -43,7 +43,7 @@
 
 <!-- @ External I/O @ -->
     <!-- RTK-GNSS -->
-    <arg name="use_RTK-GNSS" value="true"/>
+    <arg name="use_RTK-GNSS" value="false"/>
     <group if="$(arg use_RTK-GNSS)">
         <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
         <param name="port" value="/dev/usb_rsaq5"/>
@@ -52,17 +52,19 @@
     </group>
 
     <!-- Velodyne VLP-16 -->
-    <arg name="use_Velodyne" value="true"/>
+    <arg name="use_Velodyne" value="false"/>
     <group if="$(arg use_Velodyne)">
         <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
-        <arg name="calibration" default="/home/joule/VLP16-HiRes.yaml"/>    
+        <arg name="calibration" value="/home/joule/VLP16-HiRes.yaml"/>
+        <!-- <arg name="frame_id" value="$(arg scan_frame)"/>  -->
     </group>
 
     <!-- Ninebot Serial -->
     <arg name="use_Ninebot_Serial" value="true"/>
     <group if="$(arg use_Ninebot_Serial)">
         <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
-        <param name="port" value="/dev/nucleo"/>
+        <!-- <param name="port" value="/dev/nucleo"/> -->
+        <param name="port" value="/dev/pts/24"/>
         </node>
     </group>
 
