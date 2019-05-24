@@ -17,8 +17,8 @@
     <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/> 
 
     <!-- GNSS -->
-    <arg name="origin_lat" value="33.599053"/>
-    <arg name="origin_lon" value="130.211607"/>
+    <arg name="origin_lat" value="33.595542"/>
+    <arg name="origin_lon" value="130.219009"/>
     <arg name="angle_offset" value="0"/>
     <arg name="scale_offset" value="1"/>
     <arg name="sel_solutions" value="fix"/>
@@ -47,7 +47,7 @@
 
 <!-- @ External I/O @ -->
     <!-- RTK-GNSS -->
-    <arg name="use_RTK-GNSS" value="false"/>
+    <arg name="use_RTK-GNSS" value="true"/>
     <group if="$(arg use_RTK-GNSS)">
         <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
         <param name="port" value="/dev/usb_rsaq5"/>
@@ -62,10 +62,8 @@
         <arg name="calibration" value="$(env HOME)/VLP16-HiRes.yaml"/>
         <remap from="scan" to="scan_converted"/>
 
-        <!-- <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan"> -->
-            <!-- See all params at http://wiki.ros.org/pointcloud_to_laserscan -->
-            
-            <!-- <param name="min_height" value="0.0"/>
+        <!-- <node pkg="pointcloud_to_laserscan" type="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">    
+            <param name="min_height" value="0.0"/>
             <param name="max_height" value="2.0"/>            
             <param name="range_min" value="0.1"/>
             <param name="range_max" value="10.0"/>
@@ -79,8 +77,8 @@
     <arg name="use_Ninebot_Serial" value="true"/>
     <group if="$(arg use_Ninebot_Serial)">
         <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
-        <!-- <param name="port" value="/dev/nucleo"/> -->
-        <param name="port" value="/dev/pts/24"/>
+        <param name="port" value="/dev/nucleo"/>
+        <!-- <param name="port" value="/dev/pts/24"/> -->
         </node>
     </group>
 
