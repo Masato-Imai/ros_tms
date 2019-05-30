@@ -41,7 +41,7 @@
     </node>
 
     <node pkg="tf2_ros" type="static_transform_publisher" name="foot_to_scan"
-    args="0.1 0 0.36 45 0 0 $(arg base_frame) $(arg scan_frame)">
+    args="0.1 0 0.36 0.785398 0 0 $(arg base_frame) $(arg scan_frame)">
     </node>
 
     <node pkg="tf2_ros" type="static_transform_publisher" name="velodyne"
