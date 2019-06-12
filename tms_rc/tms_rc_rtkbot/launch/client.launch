@@ -1,16 +1,24 @@
 <launch>
 
-<!-- RTK-GNSS -->
+<!-- Use External I/O -->
 <arg name="use_RTK-GNSS" value="false"/>
+<arg name="use_Velodyne" value="true"/>
+<arg name="use_Ninebot_Serial" value="true"/>
+
+<!-- Device Alias -->
+<arg name="rtk_device_name" value="usb_rsaq5"/>
+<arg name="serial_device_name" value="nucleo"/>
+<!-- <arg name="serial_device_name" value="pts/24"/> -->
+
+<!-- RTK-GNSS -->
 <group if="$(arg use_RTK-GNSS)">
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
-    <param name="port" value="/dev/usb_rsaq5"/>
+    <param name="port" value="/dev/($arg rtk_device_name)"/>
     <param name="baud" value="115200"/>
     </node>
 </group>
 
 <!-- Velodyne VLP-16 -->
-<arg name="use_Velodyne" value="true"/>
 <group if="$(arg use_Velodyne)">
     <include file="$(find velodyne_pointcloud)/launch/VLP16_points.launch"/>
     <arg name="calibration" value="$(env HOME)/VLP16-HiRes.yaml"/>
@@ -45,11 +53,9 @@
 </group>
 
 <!-- Ninebot Serial -->
-<arg name="use_Ninebot_Serial" value="true"/>
 <group if="$(arg use_Ninebot_Serial)">
     <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
-    <param name="port" value="/dev/nucleo"/>
-    <!-- <param name="port" value="/dev/pts/24"/> -->
+    <param name="port" value="/dev/($arg serial_device_name)"/>
     </node>
 </group>
 
