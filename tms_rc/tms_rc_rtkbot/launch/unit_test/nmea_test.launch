@@ -1,4 +1,6 @@
 <launch>
+    <arg name="rtk_device_name" value="ublox"/>
+
     <arg name="unit_test" default="false"/>
     <group if="$(arg unit_test)">
 
@@ -6,7 +8,7 @@
     <group if="$(arg publish_nmea_sentence)">
         <!-- nmea_topic_serial_reader -->
         <node pkg="nmea_navsat_driver" type="nmea_topic_serial_reader" name="nmea_topic_serial_reader" output="screen">
-            <param name="port" value="/dev/ublox"/>
+            <param name="port" value="/dev/$(arg rtk_device_name)"/>
         </node>
         <!-- nmea_topic_driver -->
         <node pkg="nmea_navsat_driver" type="nmea_topic_driver" name="nmea_topic_driver" output="screen">
@@ -16,7 +18,7 @@
     <group unless="$(arg publish_nmea_sentence)">
         <!-- nmea_serial_driver -->
         <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
-            <param name="port" value="/dev/ublox"/>
+            <param name="port" value="/dev/$(arg rtk_device_name)"/>
         </node>
     </group>
 
@@ -25,7 +27,7 @@
     <group unless="$(arg unit_test)">
         <!-- nmea_serial_driver -->
         <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
-            <param name="port" value="/dev/ublox"/>
+            <param name="port" value="/dev/$(arg rtk_device_name)"/>
         </node>
 
         <!-- rtkgps_measured -->

@@ -13,7 +13,7 @@
 <!-- RTK-GNSS -->
 <group if="$(arg use_RTK-GNSS)">
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
-    <param name="port" value="/dev/($arg rtk_device_name)"/>
+    <param name="port" value="/dev/$(arg rtk_device_name)"/>
     <param name="baud" value="115200"/>
     </node>
 </group>
@@ -55,7 +55,7 @@
 <!-- Ninebot Serial -->
 <group if="$(arg use_Ninebot_Serial)">
     <node pkg="tms_rc_rtkbot" type="ninebot_serial" name="ninebot_serial" output="screen">
-    <param name="port" value="/dev/($arg serial_device_name)"/>
+    <param name="port" value="/dev/$(arg serial_device_name)"/>
     </node>
 </group>
 
