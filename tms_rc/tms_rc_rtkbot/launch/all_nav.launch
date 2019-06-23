@@ -17,6 +17,7 @@
     <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/> 
 
     <!-- GNSS -->
+    <arg name="gnss_topic_name" value="gnss_data"/>
     <arg name="origin_lat" value="33.595542"/>
     <arg name="origin_lon" value="130.219009"/>
     <arg name="angle_offset" value="0"/>
@@ -24,7 +25,7 @@
     <arg name="sel_solutions" value="fix"/>
 
     <!-- Use External I/O -->
-    <arg name="use_RTK-GNSS" value="false"/>
+    <arg name="use_RTK-GNSS" value="true"/>
     <arg name="use_Velodyne" value="true"/>
     <arg name="use_Ninebot_Serial" value="true"/>
 
@@ -36,6 +37,7 @@
 <!-- RTK-GNSS -->
 <group if="$(arg use_RTK-GNSS)">
     <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+    <remap from="fix" to="$(arg gnss_topic_name)"/>
     <param name="port" value="/dev/$(arg rtk_device_name)"/>
     <param name="baud" value="115200"/>
     </node>
@@ -193,7 +195,7 @@
     <!-- Frame, Topic -->
     <param name="map_frame_name" value="$(arg global_frame)"/>
     <param name="odom_frame_name" value="$(arg odom_frame)"/>
-    <param name="in_topic_name" value="/fix"/>
+    <param name="in_topic_name" value="$(arg gnss_topic_name)"/>
     <param name="out_topic_name" value="odometry/measured"/>
     <!-- GNSS Configuration-->
     <param name="origin_lat" value="$(arg origin_lat)"/>
