@@ -1,0 +1,59 @@
+<launch>
+
+<!-- @ Args @ -->
+    <!-- initial pose -->
+    <arg name="initialpose_x" value="0"/>
+    <arg name="initialpose_y" value="0"/>
+    <arg name="initialpose_a" value="0"/>
+    <arg name="initial_state" value="[$(arg initialpose_x), $(arg initialpose_y), 0, 0, 0, $(arg initialpose_a), 0, 0, 0, 0, 0, 0, 0, 0, 0]"/>
+
+    <!-- frame name -->
+    <arg name="global_frame" value="map"/>
+    <arg name="odom_frame"   value="odom"/>
+    <arg name="base_frame"   value="base_footprint"/>
+    <arg name="scan_frame"   value="base_scan"/>
+
+    <!-- GNSS -->
+    <arg name="gnss_topic_name" value="gnss_data"/>
+    <arg name="origin_lat" value="33.5956655"/>
+    <arg name="origin_lng" value="130.2191395"/>
+    <arg name="angle_offset" value="0"/>
+    <arg name="scale_offset" value="1"/>
+    <arg name="sel_solutions" value="all"/>
+
+    <!-- Use External I/O -->
+    <arg name="use_RTK-GNSS" value="true"/>
+    <arg name="use_Velodyne" value="true"/>
+    <arg name="use_Ninebot_Serial" value="true"/>
+
+    <!-- Device Alias -->
+    <arg name="rtk_device_name" value="usb_rsaq5"/>
+    <arg name="serial_device_name" value="nucleo"/>
+    <!-- <arg name="serial_device_name" value="pts/24"/> -->
+
+<!-- RTK-GNSS -->
+<group if="$(arg use_RTK-GNSS)">
+    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+    <remap from="fix" to="$(arg gnss_topic_name)"/>
+    <param name="port" value="/dev/$(arg rtk_device_name)"/>
+    <param name="baud" value="115200"/>
+    </node>
+</group>
+
+<!-- @ Rtkgps_Measured @-->
+    <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
+    <!-- Frame, Topic -->
+    <param name="map_frame_name" value="$(arg global_frame)"/>
+    <param name="odom_frame_name" value="$(arg odom_frame)"/>
+    <param name="in_topic_name" value="$(arg gnss_topic_name)"/>
+    <param name="out_topic_name" value="odometry/measured"/>
+    <!-- GNSS Configuration-->
+    <param name="origin_lat" value="$(arg origin_lat)"/>
+    <param name="origin_lng" value="$(arg origin_lng)"/>
+    <param name="angle_offset" value="$(arg angle_offset)"/>
+    <param name="scale_offset" value="$(arg scale_offset)"/>
+    <param name="sel_solutions" value="$(arg sel_solutions)"/>
+    </node>
+
+</launch>
+

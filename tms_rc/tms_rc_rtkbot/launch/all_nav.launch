@@ -18,11 +18,11 @@
 
     <!-- GNSS -->
     <arg name="gnss_topic_name" value="gnss_data"/>
-    <arg name="origin_lat" value="33.595542"/>
-    <arg name="origin_lon" value="130.219009"/>
-    <arg name="angle_offset" value="0"/>
+    <arg name="origin_lat" value="33.595542802"/>
+    <arg name="origin_lng" value="130.2190078262"/>
+    <arg name="angle_offset" value="45"/>
     <arg name="scale_offset" value="1"/>
-    <arg name="sel_solutions" value="fix"/>
+    <arg name="sel_solutions" value="all"/>
 
     <!-- Use External I/O -->
     <arg name="use_RTK-GNSS" value="true"/>
@@ -199,7 +199,7 @@
     <param name="out_topic_name" value="odometry/measured"/>
     <!-- GNSS Configuration-->
     <param name="origin_lat" value="$(arg origin_lat)"/>
-    <param name="origin_lon" value="$(arg origin_lon)"/>
+    <param name="origin_lng" value="$(arg origin_lng)"/>
     <param name="angle_offset" value="$(arg angle_offset)"/>
     <param name="scale_offset" value="$(arg scale_offset)"/>
     <param name="sel_solutions" value="$(arg sel_solutions)"/>

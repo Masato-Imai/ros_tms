@@ -49,7 +49,7 @@ class RtkMeasuredClass:
   def _latlng2xy(self, lng, lat):
 
     wgs84 = pyproj.Proj(init='EPSG:4326')  # WGS84 緯度経度 (測地系)
-    rect6 = pyproj.Proj(init='EPSG:2444')  # 平面直角座標系 (座標系) 場所によって変更する必要あり
+    rect6 = pyproj.Proj(init='EPSG:2444')  # 平面直角座標系 (座標系)s
 
     origin_X, origin_Y = pyproj.transform(wgs84, rect6, self.origin_lng, self.origin_lat)  # Map原点の座標
     target_X, target_Y = pyproj.transform(wgs84, rect6, lng, lat)  # 測位している点
