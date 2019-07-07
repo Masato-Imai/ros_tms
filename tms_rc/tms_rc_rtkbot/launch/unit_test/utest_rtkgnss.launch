@@ -1,0 +1,83 @@
+<launch>
+
+<!-- @ Args @ -->
+    <!-- frame name -->
+    <arg name="global_frame" value="map"/>
+    <arg name="odom_frame"   value="odom"/>
+    <arg name="base_frame"   value="base_footprint"/>
+    <arg name="scan_frame"   value="base_scan"/>
+
+    <!-- RTK-GNSS Configuration -->
+    <arg name="gnss_topic_name" value="gnss_data"/>
+    <arg name="rtk_device_name" value="usb_rsaq5"/>
+
+    <arg name="origin_lat" value="33.595542802"/>
+    <arg name="origin_lng" value="130.2190078262"/>
+    <arg name="angle_offset" value="45"/>
+    <arg name="scale_offset" value="1"/>
+    <arg name="sel_solutions" value="all"/>
+
+    <!-- Enable Nodes -->
+    <arg name="enable_nmea_navsat_driver" value="true"/>
+    <arg name="enable_rtkgps_measured" value="true"/>
+    <arg name="enable_visualize" value="true"/>
+
+<!-- @ Static TF @ -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_map"
+    args="0 0 0 0 0 0 world_link $(arg global_frame)">
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_measured"
+    args="0 0 0 0 0 0 $(arg global_frame) base_measured">
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="foot_to_scan"
+    args="0.1 0 0.36 0.785398 0 0 $(arg base_frame) $(arg scan_frame)">
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="scan_to_velodyne"
+    args="0 0 0 0 0 0 $(arg scan_frame) velodyne">
+    </node>
+
+<!-- @ RTK-GNSS @ -->
+<group if="$(arg enable_nmea_navsat_driver)">
+    <node pkg="nmea_navsat_driver" type="nmea_serial_driver" name="nmea_serial_driver" output="screen">
+    <remap from="fix" to="$(arg gnss_topic_name)"/>
+    <param name="port" value="/dev/$(arg rtk_device_name)"/>
+    <param name="baud" value="115200"/>
+    </node>
+</group>
+
+<!-- @ Rtkgps_Measured @-->
+<group if="$(arg enable_rtkgps_measured)">
+    <node pkg="tms_rc_rtkbot" type="rtkgps_measured" name="rtkgps_measured" output="screen">
+    <!-- Frame, Topic -->
+    <param name="map_frame_name" value="$(arg global_frame)"/>
+    <param name="odom_frame_name" value="$(arg odom_frame)"/>
+    <param name="in_topic_name" value="$(arg gnss_topic_name)"/>
+    <param name="out_topic_name" value="odometry/measured"/>
+    <!-- GNSS Configuration-->
+    <param name="origin_lat" value="$(arg origin_lat)"/>
+    <param name="origin_lng" value="$(arg origin_lng)"/>
+    <param name="angle_offset" value="$(arg angle_offset)"/>
+    <param name="scale_offset" value="$(arg scale_offset)"/>
+    <param name="sel_solutions" value="$(arg sel_solutions)"/>
+    </node>
+</group>
+
+<!-- Visualize -->
+<group if="$(arg enable_visualize)">
+    <!-- @ Map Server @ -->
+    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)">
+    <param name="frame_id" value="$(arg global_frame)"/>
+    </node>
+    <!-- @ Rviz @ -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz/maptest.rviz" respawn="true"/>
+</group>
+
+
+
+
+</launch>
+
