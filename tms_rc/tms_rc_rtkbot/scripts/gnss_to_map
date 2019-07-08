@@ -11,7 +11,7 @@ from nav_msgs.msg           import Odometry
 from visualization_msgs.msg import Marker
 
 
-class RtkMeasuredClass:
+class GnssToMapClass:
   def __init__(self):
 
     # Params
@@ -19,7 +19,7 @@ class RtkMeasuredClass:
     self.odom_frame = rospy.get_param('~odom_frame_name', 'odom')
     self.origin_lat = rospy.get_param('~origin_lat', 0.)
     self.origin_lng = rospy.get_param('~origin_lng', 0.)
-    self.angle_offset = rospy.get_param('~angle_offset', 0.) * math.pi / 180.0
+    self.angle_offset = np.deg2rad(rospy.get_param('~angle_offset', 0.))
     self.scale_offset = rospy.get_param('~scale_offset', 1.)
     self.sel_solutions = rospy.get_param('~sel_solutions', "fix")
     in_topic_name = rospy.get_param('~in_topic_name', '/fix')
@@ -91,40 +91,34 @@ class RtkMeasuredClass:
       self.marker.color.r = 0.0
       self.marker.color.g = 0.0
       self.marker.color.b = 1.0
+      print("Status: Fix")
     elif data.status.status == self.navsat_status.get('float'): # Float: Green
       self.marker.color.r = 0.0
       self.marker.color.g = 1.0
       self.marker.color.b = 0.0
+      print("Status: Float")
     else: # Else: Red
       self.marker.color.r = 1.0
       self.marker.color.g = 0.0
       self.marker.color.b = 0.0
+      print("Status: Autonomous")
 
     # Publish Topics
     self.marker_pub.publish(self.marker)
 
     if self.sel_solutions == "all":
       self.gps_pub.publish(odom)
-      print("Publish All Solutions")
-    elif self.sel_solutions == "fix":
-      if data.status.status == self.navsat_status.get('fix'):
-        self.gps_pub.publish(odom)
-        print("Publish Fix Solutions")
-      else:
-        print("Could not get fix solutions")
-    elif self.sel_solutions == "float":
-      if data.status.status == self.navsat_status.get('float'):
-        self.gps_pub.publish(odom)
-        print("Publish Float Solutions")
-      else:
-        print("Could not get float solutions")
+    elif (self.sel_solutions == "fix") and (data.status.status == self.navsat_status.get('fix')):
+      self.gps_pub.publish(odom)
+    elif (self.sel_solutions == "float") and (data.status.status == self.navsat_status.get('float')): # is it needed?
+      self.gps_pub.publish(odom)
     else:
       print("Param Setting Error")
 
 if __name__ == '__main__':
-  rospy.init_node('rtkgps_measured', anonymous=True)
+  rospy.init_node('gnss_to_map', anonymous=True)
   try:
-    RtkMeasuredClass()
+    GnssToMapClass()
     rospy.spin()
   except rospy.ROSInterruptException:
-    rospy.loginfo("rtkgps_measured node finished.")
+    rospy.loginfo("gnss_to_map node finished.")
