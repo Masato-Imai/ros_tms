@@ -15,8 +15,8 @@
     <arg name="gnss_topic_name" value="gnss_data"/>
 
     <!-- file -->
-    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/> 
-    <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/map_18x18.yaml"/>
+    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/westzone/map.yaml"/> 
+    <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/westzone.yaml"/>
     <arg name="velodyne_calibration_file" value="$(env HOME)/VLP16-HiRes.yaml"/>
 
     <!-- External I/O -->
@@ -25,7 +25,7 @@
     <arg name="use_Ninebot_Serial" value="true"/>
     <arg name="rtk_device_name" value="usb_rsaq5"/>
     <arg name="serial_device_name" value="nucleo"/>
-    <!-- <arg name="serial_device_name" value="pts/24"/> -->
+    <!-- <arg name="serial_device_name" value="pts/20"/> -->
 
 <!-- RTK-GNSS -->
 <group if="$(arg use_RTK-GNSS)">
