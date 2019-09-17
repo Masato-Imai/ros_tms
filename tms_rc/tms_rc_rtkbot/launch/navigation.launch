@@ -52,7 +52,8 @@
 
     <!-- push pointcloud_to_laserscan nodelet into sensor's nodelet manager-->
     <node pkg="nodelet" type="nodelet" name="pointcloud_to_laserscan_nodelet" args="load pointcloud_to_laserscan/pointcloud_to_laserscan_nodelet velodyne_nodelet_manager">
-        <remap from="cloud_in" to="velodyne_points"/>
+        <!-- <remap from="cloud_in" to="velodyne_points"/> -->
+        <remap from="cloud_in" to="velodyne_points_filtered"/>
         <remap from="scan" to="scan_converted"/>
         <rosparam file="$(find tms_rc_rtkbot)/param/sensor/pointcloud_to_laserscan.yaml"/>
     </node>
