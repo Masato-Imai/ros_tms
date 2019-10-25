@@ -57,10 +57,10 @@ ssh odroid@p2sen_* -oHostKeyAlgorithms='ssh-rsa'
 ```
 と手でログインし，RSAアルゴリズムを使うよう指定しておく
 
-### 0.3. Create `.sh` File in Odroid
+### 0.3. Create `.bash` File in Odroid
 launchファイルで指定した，`/home/odroid/env.bash`というスクリプトをodroidのホームディレクトリに作成
 
-(remoteの際，これが`~/.bashrc`の代わりになる)
+(remoteの際，これが`~/.bashrc`の代わりになる?)
 ```bash
 #!/bin/bash
 
