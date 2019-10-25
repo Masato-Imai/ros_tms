@@ -8,7 +8,7 @@
       <param name="angle_max" value=" 1.832595714595"/>
     </node>
 
-    <node machine="p2sen_1" pkg="tms_ss_pot" type="change_nan" name="change_nan1">
+    <node machine="p2sen_1" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/most_intense" to="/urg1/most_intense"/>
       <remap from="/LaserTracker" to="/LaserTracker1"/>
     </node>
@@ -23,7 +23,7 @@
       <param name="angle_max" value=" 1.832595714595"/>
     </node>
 
-    <node machine="p2sen_2" pkg="tms_ss_pot" type="change_nan" name="change_nan2">
+    <node machine="p2sen_2" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/most_intense" to="/urg2/most_intense"/>
       <remap from="/LaserTracker" to="/LaserTracker2"/>
     </node>
@@ -39,7 +39,7 @@
       <param name="angle_max" value=" 1.832595714595"/>
     </node>
 
-    <node machine="p2sen_3" pkg="tms_ss_pot" type="change_nan" name="change_nan3">
+    <node machine="p2sen_3" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/most_intense" to="/urg3/most_intense"/>
       <remap from="/LaserTracker" to="/LaserTracker3"/>
     </node>
@@ -56,7 +56,7 @@
       <param name="angle_max" value=" 1.832595714595"/>
     </node>
 
-    <node machine="p2sen_4" pkg="tms_ss_pot" type="change_nan" name="change_nan4">
+    <node machine="p2sen_4" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/most_intense" to="/urg4/most_intense"/>
       <remap from="/LaserTracker" to="/LaserTracker4"/>
     </node>
