@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+import rospy
+import message_filters
+from nav_msgs.msg import Odometry
+
+
+class RtkP2senDiplexerClass:
+    def __init__(self):
+        # Params
+        in_topic_p2sen = rospy.get_param('~in_topic_p2sen', 'ninebot_measured_pos')
+        in_topic_gps = rospy.get_param('~in_topic_gps', 'odometry/measured')
+        out_topic_odom = "piyopiyo"  # @FIXME
+
+        # Pub, Sub
+        self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=100)
+        self.sub_p2sen = message_filters.Subscriber(in_topic_p2sen, Odometry)
+        self.sub_gps = message_filters.Subscriber(in_topic_gps, Odometry)
+
+        # Message Filters
+        ts = message_filters.ApproximateTimeSynchronizer(fs=[self.sub_p2sen, self.sub_gps], queue_size=100, slop=5.0, allow_headerless=True)
+        ts.registerCallback(self.callback)
+
+    def callback(self, p2sen_odom, gps_odom):
+
+        ### @TODO
+
+        # p2sen_x, p2sen_y = p2sen_odom.pose.pose.position.x, p2sen_odom.pose.pose.position.y
+        gps_x, gps_y = gps_odom.pose.pose.position.x, gps_odom.pose.pose.position.y
+
+        # Publish Topic
+        BORDER_X = 10
+        BORDER_Y = 20
+
+        if (gps_x < BORDER_X) and (gps_y < BORDER_Y):
+            self.pub.publish(p2sen_odom)
+            print("A")
+        else:
+            self.pub.publish(gps_odom)
+            print("B")
+
+
+if __name__ == '__main__':
+    rospy.init_node('rtk_p2sen_diplexer', anonymous=True)
+    try:
+        RtkP2senDiplexerClass()
+        rospy.spin()
+    except rospy.ROSInterruptException:
+        rospy.loginfo("rtk_p2sen_diplexer node finished.")
