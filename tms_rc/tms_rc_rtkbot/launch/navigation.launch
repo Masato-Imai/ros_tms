@@ -15,7 +15,8 @@
     <arg name="gnss_topic_name" value="gnss_data"/>
 
     <!-- file -->
-    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/westzone/map.yaml"/> 
+    <!-- <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/westzone/map.yaml"/>  -->
+    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/>
     <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/westzone.yaml"/>
     <arg name="velodyne_calibration_file" value="$(env HOME)/VLP16-HiRes.yaml"/>
 
@@ -44,8 +45,7 @@
 
     <!-- Velodyne Filter -->
     <node pkg="tms_rc_rtkbot" type="velodyne_filter" name="velodyne_filter" output="screen">
-        <param name="ring_no_min" value="0"/>
-        <!-- max: 7 or 8 -->
+        <param name="ring_no_min" value="2"/>
         <param name="ring_no_max" value="7"/>
         <param name="velodyne_topic_name" value="velodyne_points"/>
     </node>
