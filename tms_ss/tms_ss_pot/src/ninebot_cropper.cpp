@@ -14,7 +14,18 @@
 
 bool GetInitPosition = false;
 ros::Publisher pub, pub_pot, pub_vis, pub_vis_array;
-double ninebot_x, ninebot_y, ninebot_z, ninebot_ox, ninebot_oy, ninebot_oz, ninebot_ow;
+
+struct _Pose{
+  double x;
+  double y;
+  double z;
+  double qx;
+  double qy;
+  double qz;
+  double qw;
+};
+
+_Pose ninebot_pose;
 
 void peopleCallback(const people_msgs::People &people_in){
   float mindist = FLT_MAX;
@@ -27,7 +38,9 @@ void peopleCallback(const people_msgs::People &people_in){
   for(int i = 0; i < people_in.people.size(); ++i){
     float x = people_in.people.at(i).position.x;
     float y = people_in.people.at(i).position.y;
-    float dist = sqrt((ninebot_x-x)*(ninebot_x-x)+(ninebot_y-y)*(ninebot_y-y));
+    float dist = sqrt(pow(ninebot_pose.x - x, 2) + pow(ninebot_pose.y - y, 2));
+
+    // float dist = sqrt((ninebot_x-x)*(ninebot_x-x)+(ninebot_y-y)*(ninebot_y-y));
     if(GetInitPosition && dist < MARGIN){
       if(mindist>dist){
         mindist = dist;
@@ -175,12 +188,12 @@ void peopleCallback(const people_msgs::People &people_in){
       marker_ninebot.pose.position.z = 0.5;
     }
 
-    marker_ninebot.pose.position.x = ninebot_x;
-    marker_ninebot.pose.position.y = ninebot_y;
-    marker_ninebot.pose.orientation.x = ninebot_ox;
-    marker_ninebot.pose.orientation.y = ninebot_oy;
-    marker_ninebot.pose.orientation.z = ninebot_oz;
-    marker_ninebot.pose.orientation.w = ninebot_ow;
+    marker_ninebot.pose.position.x = ninebot_pose.x;
+    marker_ninebot.pose.position.y = ninebot_pose.y;
+    marker_ninebot.pose.orientation.x = ninebot_pose.qx;
+    marker_ninebot.pose.orientation.y = ninebot_pose.qy;
+    marker_ninebot.pose.orientation.z = ninebot_pose.qz;
+    marker_ninebot.pose.orientation.w = ninebot_pose.qw;
 
     marker_ninebot.lifetime = ros::Duration(0.5);
 
@@ -191,13 +204,13 @@ void peopleCallback(const people_msgs::People &people_in){
 
 void odomCallback(const nav_msgs::Odometry &odom_position){
   // Get Ninebot position
-  ninebot_x = odom_position.pose.pose.position.x;
-  ninebot_y = odom_position.pose.pose.position.y;
-  ninebot_z = odom_position.pose.pose.position.z;
-  ninebot_ox = odom_position.pose.pose.orientation.x;
-  ninebot_oy = odom_position.pose.pose.orientation.y;
-  ninebot_oz = odom_position.pose.pose.orientation.z;
-  ninebot_ow = odom_position.pose.pose.orientation.w;
+  ninebot_pose.x = odom_position.pose.pose.position.x;
+  ninebot_pose.y = odom_position.pose.pose.position.y;
+  ninebot_pose.z = odom_position.pose.pose.position.z;
+  ninebot_pose.qx = odom_position.pose.pose.orientation.x;
+  ninebot_pose.qy = odom_position.pose.pose.orientation.y;
+  ninebot_pose.qz = odom_position.pose.pose.orientation.z;
+  ninebot_pose.qw = odom_position.pose.pose.orientation.w;
   GetInitPosition = true;
 }
 
@@ -206,7 +219,9 @@ int main(int argc, char** argv){
   ros::NodeHandle nh;
 
   ros::Subscriber people_sub = nh.subscribe("people_p2sen", 10, peopleCallback);
-  ros::Subscriber odom_sub = nh.subscribe("/portable1/odom", 10, odomCallback);
+  std::string odom_topic_name;
+  nh.param<std::string>("param_name", odom_topic_name, "/portable1/odom");
+  ros::Subscriber odom_sub = nh.subscribe(odom_topic_name, 10, odomCallback);
 
   pub = nh.advertise<people_msgs::People>("people_ninebot_cropped", 10);
   pub_pot = nh.advertise<nav_msgs::Odometry>("ninebot_measured_pos", 10);
