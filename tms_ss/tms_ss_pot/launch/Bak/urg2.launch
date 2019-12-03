@@ -5,8 +5,8 @@
       <param name="angle_min" value="-1.832595714595"/>
       <param name="angle_max" value=" 1.832595714595"/>
     </node>
-    <node pkg="tms_ss_pot" type="change_nan" name="change_nan2">
-      <remap from="/most_intense" to="/urg2/most_intense"/>
+    <node pkg="tms_ss_pot" type="change_nan" name="change_nan">
+      <remap from="/scan" to="/urg2/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker2"/>
     </node>
   </group>

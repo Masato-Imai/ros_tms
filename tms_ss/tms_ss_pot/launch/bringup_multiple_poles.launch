@@ -9,7 +9,7 @@
     </node>
 
     <node machine="P2SEN-1" pkg="tms_ss_pot" type="change_nan" name="change_nan">
-      <remap from="/most_intense" to="/urg1/most_intense"/>
+      <remap from="/scan" to="/urg1/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker1"/>
     </node>
   </group>
@@ -24,7 +24,7 @@
     </node>
 
     <node machine="P2SEN-2" pkg="tms_ss_pot" type="change_nan" name="change_nan">
-      <remap from="/most_intense" to="/urg2/most_intense"/>
+      <remap from="/scan" to="/urg2/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker2"/>
     </node>
   </group>
@@ -40,7 +40,7 @@
     </node>
 
     <node machine="P2SEN-3" pkg="tms_ss_pot" type="change_nan" name="change_nan">
-      <remap from="/most_intense" to="/urg3/most_intense"/>
+      <remap from="/scan" to="/urg3/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker3"/>
     </node>
 
@@ -57,7 +57,7 @@
     </node>
 
     <node machine="P2SEN-4" pkg="tms_ss_pot" type="change_nan" name="change_nan">
-      <remap from="/most_intense" to="/urg4/most_intense"/>
+      <remap from="/scan" to="/urg4/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker4"/>
     </node>
 
