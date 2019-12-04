@@ -6,12 +6,13 @@
       <param name="ip_address" value="192.168.0.10"/>
       <param name="angle_min" value="-1.832595714595"/>
       <param name="angle_max" value=" 1.832595714595"/>
+      <remap from="/urg1/scan" to="/LaserTracker1"/>
     </node>
 
-    <node machine="P2SEN-1" pkg="tms_ss_pot" type="change_nan" name="change_nan">
+    <!-- <node machine="P2SEN-1" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/scan" to="/urg1/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker1"/>
-    </node>
+    </node> -->
   </group>
 
   <group ns="urg2">
@@ -21,12 +22,13 @@
       <param name="ip_address" value="192.168.0.10"/>
       <param name="angle_min" value="-1.832595714595"/>
       <param name="angle_max" value=" 1.832595714595"/>
+      <remap from="/urg2/scan" to="/LaserTracker2"/>
     </node>
 
-    <node machine="P2SEN-2" pkg="tms_ss_pot" type="change_nan" name="change_nan">
+    <!-- <node machine="P2SEN-2" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/scan" to="/urg2/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker2"/>
-    </node>
+    </node> -->
   </group>
 
   <group ns="urg3">
@@ -37,12 +39,13 @@
       <param name="ip_address" value="192.168.0.10"/>
       <param name="angle_min" value="-1.832595714595"/>
       <param name="angle_max" value=" 1.832595714595"/>
+      <remap from="/urg3/scan" to="/LaserTracker3"/>
     </node>
 
-    <node machine="P2SEN-3" pkg="tms_ss_pot" type="change_nan" name="change_nan">
+    <!-- <node machine="P2SEN-3" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/scan" to="/urg3/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker3"/>
-    </node>
+    </node> -->
 
   </group>
 
@@ -54,12 +57,13 @@
       <param name="ip_address" value="192.168.0.10"/>
       <param name="angle_min" value="-1.832595714595"/>
       <param name="angle_max" value=" 1.832595714595"/>
+      <remap from="/urg4/scan" to="/LaserTracker4"/>
     </node>
 
-    <node machine="P2SEN-4" pkg="tms_ss_pot" type="change_nan" name="change_nan">
+    <!-- <node machine="P2SEN-4" pkg="tms_ss_pot" type="change_nan" name="change_nan">
       <remap from="/scan" to="/urg4/scan"/>
       <remap from="/LaserTracker" to="/LaserTracker4"/>
-    </node>
+    </node> -->
 
   </group>    
 </launch>
