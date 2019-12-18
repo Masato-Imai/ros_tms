@@ -1,15 +1,15 @@
 <launch>
 
-	<arg name="useMultiLRFs" value="true"/>
+	<!-- <arg name="useMultiLRFs" value="true"/> -->
 
     <!-- Use Multiple LRFs (Default) -->
-  	<group if="$(arg useMultiLRFs)">
+  	<!-- <group if="$(arg useMultiLRFs)"> -->
 
         <!-- Tracker -->
         <node pkg="tms_ss_pot" name="urg_tracker" type="urg_tracker" output="screen" />
 
         <!-- Visualizer -->
-        <node pkg="tms_ss_pot" name="visualize" type="visualize" />
+        <!-- <node pkg="tms_ss_pot" name="visualize" type="visualize" /> -->
 
         <!-- Cropper -->
         <node pkg="tms_ss_pot" name="ninebot_cropper" type="ninebot_cropper" output="screen" />
@@ -27,10 +27,10 @@
         <!-- RViz -->
         <node name="rviz_tracker" pkg="rviz" type="rviz" args="-d $(find tms_ss_pot)/rviz/tracker_config.rviz" respawn="true" />
 
-    </group>
+    <!-- </group> -->
 
     <!-- Use Single LRF -->
-    <group unless="$(arg useMultiLRFs)">
+    <!-- <group unless="$(arg useMultiLRFs)">
 
         <!-- Urg Node -->
         <node pkg="urg_node" name="urg_node" type="urg_node">
@@ -60,5 +60,5 @@
         <!-- RViz -->
         <node name="rviz_tracker" pkg="rviz" type="rviz" args="-d $(find tms_ss_pot)/rviz/tracker_config.rviz" respawn="true" />
 
-    </group>
+    </group> -->
 </launch>
