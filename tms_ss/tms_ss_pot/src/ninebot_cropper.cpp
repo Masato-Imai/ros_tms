@@ -29,23 +29,21 @@ void peopleCallback(const people_msgs::People &people_in){
   double mindist = DBL_MAX;
   nav_msgs::Odometry ninebot_measured_position;
   people_msgs::People people_out;
-  people_msgs::Person person;
-  people_out.header.frame_id = "/map";
+  people_out.header.frame_id = "/world_link";
 
   for(int i = 0; i < people_in.people.size(); ++i){
-    person_position.x = people_in.people.at(i).position.x;
-    person_position.y = people_in.people.at(i).position.y;
-    person_position.z = people_in.people.at(i).position.z;    
+    people_msgs::Person person;
+    person = people_in.people.at(i);
 
-    double dist = sqrt(pow(ninebot_pose.x - person_position.x, 2) + pow(ninebot_pose.y - person_position.y, 2));
+    double dist = sqrt(pow(ninebot_pose.x - person.position.x, 2) + pow(ninebot_pose.y - person.position.y, 2));
 
     if(GetInitPosition && dist < MARGIN){
       if(mindist>dist){
         mindist = dist;
-        ninebot_measured_position.header.frame_id = "/map";
+        ninebot_measured_position.header.frame_id = "/world_link";
         ninebot_measured_position.header.stamp = ros::Time::now();
-        ninebot_measured_position.pose.pose.position.x = person_position.x;
-        ninebot_measured_position.pose.pose.position.y = person_position.y;
+        ninebot_measured_position.pose.pose.position.x = person.position.x;
+        ninebot_measured_position.pose.pose.position.y = person.position.y;
         ninebot_measured_position.pose.pose.position.z = 0;
         ninebot_measured_position.pose.pose.orientation.x = 0; 
         ninebot_measured_position.pose.pose.orientation.y = 0;
@@ -126,7 +124,6 @@ void peopleCallback(const people_msgs::People &people_in){
 }
 
 void odomCallback(const nav_msgs::Odometry &odom_position){
-  // Get Ninebot position
   ninebot_pose.x = odom_position.pose.pose.position.x;
   ninebot_pose.y = odom_position.pose.pose.position.y;
   ninebot_pose.z = odom_position.pose.pose.position.z;
