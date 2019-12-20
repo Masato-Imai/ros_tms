@@ -28,7 +28,10 @@
         <node name="rviz_tracker" pkg="rviz" type="rviz" args="-d $(find tms_ss_pot)/rviz/tracker_config.rviz" respawn="true" />
 
         <!-- Vis -->
-        <node pkg="tms_ss_pot" name="visualize_tracking_marker" type="visualize_tracking_marker" output="screen" />        
+        <node pkg="tms_ss_pot" name="visualize_tracking_marker_local" type="visualize_tracking_marker" output="screen">
+            <remap from="marker_people" to="marker_people_local"/>
+            <remap from="marker_ninebot" to="marker_ninebot_local"/>
+        </node>        
 
     <!-- </group> -->
 
