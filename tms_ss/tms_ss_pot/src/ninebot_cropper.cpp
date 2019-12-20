@@ -149,8 +149,8 @@ int main(int argc, char** argv){
 
   pub_people = nh.advertise<people_msgs::People>("people_ninebot_cropped", 10);
   pub_ninebot = nh.advertise<nav_msgs::Odometry>("ninebot_measured_pos", 10);
-  pub_vis = nh.advertise< visualization_msgs::Marker >("visualization_ninebot", 1);
-  pub_vis_array = nh.advertise< visualization_msgs::MarkerArray >("visualization_objects", 1);
+  // pub_vis = nh.advertise< visualization_msgs::Marker >("visualization_ninebot", 1);
+  // pub_vis_array = nh.advertise< visualization_msgs::MarkerArray >("visualization_objects", 1);
 
   ros::spin();
   return 0;
