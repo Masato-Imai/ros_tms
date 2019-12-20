@@ -59,7 +59,7 @@ void peopleCallback(const people_msgs::People &people_in){
 
   if(mindist<MARGIN) pub_ninebot.publish(ninebot_measured_position);
 
-
+/*
   visualization_msgs::MarkerArray markerArray;
   int id = 1;
 
@@ -92,7 +92,9 @@ void peopleCallback(const people_msgs::People &people_in){
   }
 
   pub_vis_array.publish(markerArray);
+*/
 
+/*
   if(GetInitPosition){
     visualization_msgs::Marker marker_ninebot;
     marker_ninebot.header.frame_id = "/world_link";
@@ -120,6 +122,8 @@ void peopleCallback(const people_msgs::People &people_in){
 
     pub_vis.publish(marker_ninebot);
   }
+
+*/
 
 }
 
