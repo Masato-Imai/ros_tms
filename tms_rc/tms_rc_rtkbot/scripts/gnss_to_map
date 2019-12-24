@@ -33,7 +33,7 @@ class GnssToMapClass:
     # Marker
     self.marker = Marker()
     self._init_marker()
-    self.marker_pub = rospy.Publisher('/gps_marker', Marker, queue_size=100)
+    #self.marker_pub = rospy.Publisher('/gps_marker', Marker, queue_size=100)
 
   def _init_marker(self):
     self.marker.header.frame_id = 'world_link'

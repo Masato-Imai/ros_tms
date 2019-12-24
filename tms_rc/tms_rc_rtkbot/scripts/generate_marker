@@ -2,17 +2,19 @@
 # -*- coding:utf-8 -*-
 import rospy
 
-from nav_msgs.msg import Odometry
 from people_msgs.msg import People
+from nav_msgs.msg import Odometry
 from visualization_msgs.msg import Marker, MarkerArray
 
-class VisualizeTrackingMarkerClass:
+class GenerateMarkerClass:
     def __init__(self):
 
+        # People
         self.pub_marker_people = rospy.Publisher(rospy.get_param('~people_marker_topic_name', 'marker_people'), MarkerArray, queue_size=1000)
-        rospy.Subscriber("people_ninebot_cropped", People, self.callback_people, queue_size=1000)
+        rospy.Subscriber(rospy.get_param('~people_position', 'people_ninebot_cropped'), People, self.callback_people, queue_size=1000)
+        # Ninebot
         self.pub_marker_ninebot = rospy.Publisher(rospy.get_param('~ninebot_marker_topic_name', 'marker_ninebot'), Marker, queue_size=1000)
-        rospy.Subscriber("ninebot_measured_pos", Odometry, self.callback_ninebot, queue_size=1000)        
+        rospy.Subscriber(rospy.get_param('~ninebot_position', 'ninebot_odom'), Odometry, self.callback_ninebot, queue_size=1000)        
 
     def callback_people(self, data):
         marker_people = MarkerArray()
@@ -61,13 +63,12 @@ class VisualizeTrackingMarkerClass:
         marker_ninebot.mesh_resource = "package://tms_ss_pot/meshes/ninebot_v2.dae"
         marker_ninebot.mesh_use_embedded_materials = True
 
-        self.pub_marker_ninebot.publish(marker_ninebot)  
-
+        self.pub_marker_ninebot.publish(marker_ninebot)
 
 if __name__ == "__main__":
-    rospy.init_node("visualize_tracking_marker", anonymous=True)
+    rospy.init_node("generate_marker", anonymous=True)
     try:
-        VisualizeTrackingMarkerClass()
+        GenerateMarkerClass()
         rospy.spin()
     except rospy.ROSInterruptException:
-        rospy.loginfo("visualize_tracking_marker node finished.")
+        rospy.loginfo("generate_marker node finished.")

@@ -143,9 +143,9 @@ int main(int argc, char** argv){
   ros::NodeHandle nh;
 
   ros::Subscriber people_sub = nh.subscribe("people_p2sen", 10, peopleCallback);
-  std::string odom_topic_name;
-  nh.param<std::string>("param_name", odom_topic_name, "/portable1/odom");
-  ros::Subscriber odom_sub = nh.subscribe(odom_topic_name, 10, odomCallback);
+  std::string cropper_odom_topic_name;
+  nh.param<std::string>("param_name", cropper_odom_topic_name, "/portable1/odom");
+  ros::Subscriber odom_sub = nh.subscribe(cropper_odom_topic_name, 10, odomCallback);
 
   pub_people = nh.advertise<people_msgs::People>("people_ninebot_cropped", 10);
   pub_ninebot = nh.advertise<nav_msgs::Odometry>("ninebot_measured_pos", 10);

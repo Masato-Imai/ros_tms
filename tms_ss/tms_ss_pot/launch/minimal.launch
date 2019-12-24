@@ -1,0 +1,12 @@
+<launch>
+    <!-- Urg Node (Remote) -->
+    <include file="$(find tms_ss_pot)/launch/bringup_multiple_poles.launch"/>
+    
+    <!-- Tracker -->
+    <node pkg="tms_ss_pot" name="urg_tracker" type="urg_tracker" output="screen"/>
+
+    <!-- Cropper -->
+    <node pkg="tms_ss_pot" name="ninebot_cropper" type="ninebot_cropper" output="screen">
+        <param name="cropper_odom_topic_name" value="/portable1/odom"/>
+    </node>
+</launch>

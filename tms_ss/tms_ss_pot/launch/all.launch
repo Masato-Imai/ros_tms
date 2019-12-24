@@ -1,4 +1,0 @@
-<launch>
-    <include file="$(find tms_ss_pot)/launch/bringup_multiple_poles.launch"/>
-    <include file="$(find tms_ss_pot)/launch/p2sen_tracker.launch"/>
-</launch>
