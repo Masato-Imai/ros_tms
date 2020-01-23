@@ -1,4 +1,13 @@
 <launch>
+
+  <!-- Urg Node (Remote) -->
+  <include file="$(find tms_ss_pot)/launch/bringup_multiple_poles.launch">
+      <arg name="urg1" value="true"/>
+      <arg name="urg2" value="false"/>
+      <arg name="urg3" value="false"/>
+      <arg name="urg4" value="false"/>
+  </include>
+
   <!-- Laser Visualizer -->
   <node pkg="tms_ss_pot" type="laser_visualize_multi" name="laser_visualize_multi"/>
 
