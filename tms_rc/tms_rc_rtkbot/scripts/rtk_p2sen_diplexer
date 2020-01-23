@@ -2,7 +2,7 @@
 # -*- coding:utf-8 -*-
 
 import rospy
-import message_filters
+#import message_filters
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import NavSatFix
 
@@ -21,12 +21,13 @@ class RtkP2senDiplexerClass:
         rospy.Subscriber(in_topic_navsat, NavSatFix, self.navsat_callback, queue_size=100)
         self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=100)
 
+        # Var
         self.p2sen_odom = Odometry()
         self.gps_odom = Odometry()
         self.navsat = NavSatFix()
         self.sensor = "gps"
         self.non_rtk_cnt = 0
-        self.non_rtk_threash = 5 # 何回 Fix or Float 以外になったらP2-Senに切り替えるか
+        self.non_rtk_threash = 5 # 何回連続で Fix or Float 以外になったらP2-Senに切り替えるか
 
         # Main
         while not rospy.is_shutdown():
@@ -35,8 +36,10 @@ class RtkP2senDiplexerClass:
             gps_status = self.navsat.status.status
             if gps_status == -1 or gps_status == 0 or gps_status == 1:
                 self.non_rtk_cnt += 1
+            elif gps_status == 2 or gps_status == 3:
+                self.non_rtk_cnt = 0
 
-            if self.non_rtk_cnt >= self.non_rtk_threash:
+            if self.non_rtk_cnt == self.non_rtk_threash:
                 self.sensor = "p2sen"
 
             ## Publish
