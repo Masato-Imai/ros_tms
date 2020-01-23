@@ -13,15 +13,11 @@
   <arg name="initial_state" value="[$(arg initialpose_x), $(arg initialpose_y), 0, 0, 0, $(arg initialpose_a), 0, 0, 0, 0, 0, 0, 0, 0, 0]"/>
 
   <!-- map file -->
-  <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/ito_parking/map.yaml"/>
+  <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/lib_to_coi/map.yaml"/>
 
   <!-- Turtlebot3 -->
-  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
-
-  <param name="tb3_model" value="$(arg model)"/>
-
   <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
-    <arg name="model" value="$(arg model)" />
+    <arg name="model" value="burger" />
   </include>
 
   <!-- Turtlebot3 Fake Node -->

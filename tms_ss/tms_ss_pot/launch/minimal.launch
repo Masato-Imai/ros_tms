@@ -1,12 +1,30 @@
 <launch>
     <!-- Urg Node (Remote) -->
-    <include file="$(find tms_ss_pot)/launch/bringup_multiple_poles.launch"/>
+    <include file="$(find tms_ss_pot)/launch/bringup_multiple_poles.launch">
+        <arg name="urg1" value="true"/>
+        <arg name="urg2" value="true"/>
+        <arg name="urg3" value="true"/>
+        <arg name="urg4" value="true"/>
+    </include>
     
     <!-- Tracker -->
     <node pkg="tms_ss_pot" name="urg_tracker" type="urg_tracker" output="screen"/>
 
     <!-- Cropper -->
     <node pkg="tms_ss_pot" name="ninebot_cropper" type="ninebot_cropper" output="screen">
-        <param name="cropper_odom_topic_name" value="/portable1/odom"/>
+        <param name="cropper_odom_topic_name" value="ninebot_odom"/>
     </node>
+
+    <!-- Monitor -->
+    <arg name="monitor" value="true"/>
+
+    <group if="$(arg monitor)">
+        <node name="rviz_tracker" pkg="rviz" type="rviz" args="-d $(find tms_ss_pot)/rviz/tracker_config.rviz" respawn="true" />
+
+        <node pkg="tms_ss_pot" name="visualize_tracking_marker_local" type="visualize_tracking_marker" output="screen">
+            <remap from="marker_people" to="marker_people_local"/>
+            <remap from="marker_ninebot" to="marker_ninebot_local"/>
+        </node>  
+    </group>    
+
 </launch>

@@ -9,13 +9,15 @@
     <arg name="gnss_topic_name" value="gnss_data"/>
 
     <!-- file -->
-    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/westzone/map.yaml"/> 
-    <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/westzone.yaml"/>
+    <arg name="place" value="map_coi_f1"/>
+    <!-- <arg name="place" value="lib_to_coi"/> -->
+    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/$(arg place)/map_new.yaml"/> 
+    <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/$(arg place).yaml"/>
 
     <arg name="rtk_device_name" value="usb_rsaq5"/>
 
     <!-- Enable Nodes -->
-    <arg name="enable_nmea_navsat_driver" value="true"/>
+    <arg name="enable_nmea_navsat_driver" value="false"/>
     <arg name="enable_gnss_to_map" value="true"/>
     <arg name="enable_visualize" value="true"/>
 

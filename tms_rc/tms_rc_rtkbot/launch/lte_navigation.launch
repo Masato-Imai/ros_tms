@@ -15,9 +15,10 @@
     <arg name="gnss_topic_name" value="gnss_data"/>
 
     <!-- file -->
-    <!-- <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/westzone/map.yaml"/>  -->
-    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/map_18x18/map.yaml"/>
-    <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/westzone.yaml"/>
+    <arg name="place" value="map_coi_f1"/>
+    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/$(arg place)/map.yaml"/> 
+    <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/$(arg place).yaml"/>
+    
     <arg name="velodyne_calibration_file" value="$(env HOME)/VLP16-HiRes.yaml"/>
 
     <!-- External I/O -->
@@ -177,8 +178,20 @@
         <param name="map_frame_name" value="$(arg global_frame)"/>
         <param name="odom_frame_name" value="$(arg odom_frame)"/>
         <param name="in_topic_name" value="$(arg gnss_topic_name)"/>
-        <param name="out_topic_name" value="odometry/measured"/>
+        <param name="out_topic_name" value="odometry/measured_gps"/>
         <rosparam file="$(arg gnss_to_map_config_file)"/>
+    </node>
+
+<!-- @ToDo -->
+<!-- p2senとgpsのodomからodometry_measuredを吐き出す -->
+<!-- p2senからのtopicが来ない時はgpsのみを吐き出すようにしなきゃいけない -->
+
+<!-- @ rtk_p2sen_diplexer @-->
+    <node pkg="tms_rc_rtkbot" type="rtk_p2sen_diplexer" name="rtk_p2sen_diplexer" output="screen">
+        <param name="in_topic_p2sen" value="ninebot_measured_pos"/>
+        <param name="in_topic_gps" value="odometry/measured_gps"/>
+        <param name="in_topic_navsat" value="gnss_data"/>
+        <param name="out_topic_name" value="odometry_measured"/>
     </node>
 
 </launch>

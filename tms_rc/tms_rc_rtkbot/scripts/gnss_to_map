@@ -2,7 +2,6 @@
 # -*- coding:utf-8 -*-
 
 import rospy
-import math
 import pyproj
 import numpy as np
 
@@ -17,11 +16,15 @@ class GnssToMapClass:
     # Params
     self.map_frame = rospy.get_param('~map_frame_name', 'map')
     self.odom_frame = rospy.get_param('~odom_frame_name', 'odom')
-    self.origin_lat = rospy.get_param('~origin_lat', 0.)
-    self.origin_lng = rospy.get_param('~origin_lng', 0.)
-    self.angle_offset = np.deg2rad(rospy.get_param('~angle_offset', 0.))
-    self.scale_offset = rospy.get_param('~scale_offset', 1.)
+    self.origin_lat = np.array([rospy.get_param('~origin_lat', 0.)], dtype='float64')
+    self.origin_lng = np.array([rospy.get_param('~origin_lng', 0.)], dtype='float64')
+    self.angle_offset = np.array([rospy.get_param('~angle_offset', 0.)], dtype='float64')
+    self.scale_offset = np.array([rospy.get_param('~scale_offset', 1.)], dtype='float64')
     self.sel_solutions = rospy.get_param('~sel_solutions', "fix")
+
+    self.offset_x = np.array([rospy.get_param('~offset_x', 0.)], dtype='float64')
+    self.offset_y = np.array([rospy.get_param('~offset_y', 0.)], dtype='float64')
+
     in_topic_name = rospy.get_param('~in_topic_name', '/fix')
     out_topic_name = rospy.get_param('~out_topic_name', 'odometry/measured')
 
@@ -33,7 +36,7 @@ class GnssToMapClass:
     # Marker
     self.marker = Marker()
     self._init_marker()
-    #self.marker_pub = rospy.Publisher('/gps_marker', Marker, queue_size=100)
+    self.marker_pub = rospy.Publisher('/gps_marker', Marker, queue_size=100)
 
   def _init_marker(self):
     self.marker.header.frame_id = 'world_link'
@@ -51,15 +54,19 @@ class GnssToMapClass:
     wgs84 = pyproj.Proj(init='EPSG:4326')  # WGS84 緯度経度 (測地系)
     rect6 = pyproj.Proj(init='EPSG:2444')  # 平面直角座標系 (座標系)
 
-    origin_X, origin_Y = pyproj.transform(wgs84, rect6, self.origin_lng, self.origin_lat)  # Map原点の座標
-    target_X, target_Y = pyproj.transform(wgs84, rect6, lng, lat)  # 測位している点
+    target_lng = np.array([lng], dtype = 'float64')
+    target_lat = np.array([lat], dtype = 'float64')
 
-    rel_XY = np.array([target_X - origin_X, target_Y - origin_Y])  # Map原点からの相対座標
+    origin_X, origin_Y = pyproj.transform(wgs84, rect6, self.origin_lng[0], self.origin_lat[0])  # Map原点の座標
+    target_X, target_Y = pyproj.transform(wgs84, rect6, target_lng[0], target_lat[0])  # 測位している点
 
-    rot = np.array([[np.cos(self.angle_offset), -np.sin(self.angle_offset)],
-                    [np.sin(self.angle_offset), np.cos(self.angle_offset)]])
+    rel_XY = np.array([target_X - origin_X, target_Y - origin_Y], dtype = 'float64')  # Map原点からの相対座標
+
+    _angle_offset = np.array([np.deg2rad(self.angle_offset[0])], dtype = 'float64')
+    rot = np.array([[np.cos(_angle_offset[0]), -np.sin(_angle_offset[0])],
+                    [np.sin(_angle_offset[0]), np.cos(_angle_offset[0])]])
     
-    ret_XY = np.dot(rot, rel_XY) * self.scale_offset
+    ret_XY = np.dot(rot, rel_XY) * self.scale_offset[0]
 
     return ret_XY[0], ret_XY[1]
 
@@ -73,13 +80,21 @@ class GnssToMapClass:
     odom.header.frame_id      = self.map_frame
     odom.child_frame_id       = self.odom_frame
 
-    odom.pose.pose.position.x = x
-    odom.pose.pose.position.y = y
+    ### Caution ###
+    if x == 0 and y == 0:
+      odom.pose.pose.position.x = x
+      odom.pose.pose.position.y = y
+    else:
+      odom.pose.pose.position.x = x - self.offset_x[0]
+      odom.pose.pose.position.y = y - self.offset_y[0]          
+
     odom.pose.pose.position.z = 0.0
     odom.pose.pose.orientation.x = 0.0
     odom.pose.pose.orientation.y = 0.0
     odom.pose.pose.orientation.z = 0.0
     odom.pose.pose.orientation.w = 1.0
+
+    rtk_mode = data.status.status
 
     # Set Marker Topic
     self.marker.header.stamp = rospy.Time.now()
@@ -87,12 +102,12 @@ class GnssToMapClass:
     self.marker.pose.orientation = odom.pose.pose.orientation
     self.marker.id += 1
     
-    if data.status.status == self.navsat_status.get('fix'): # Fix: Blue
+    if rtk_mode == self.navsat_status.get('fix'): # Fix: Blue
       self.marker.color.r = 0.0
       self.marker.color.g = 0.0
       self.marker.color.b = 1.0
       print("Status: Fix")
-    elif data.status.status == self.navsat_status.get('float'): # Float: Green
+    elif rtk_mode == self.navsat_status.get('float'): # Float: Green
       self.marker.color.r = 0.0
       self.marker.color.g = 1.0
       self.marker.color.b = 0.0
@@ -106,14 +121,17 @@ class GnssToMapClass:
     # Publish Topics
     self.marker_pub.publish(self.marker)
 
-    if self.sel_solutions == "all":
-      self.gps_pub.publish(odom)
-    elif (self.sel_solutions == "fix") and (data.status.status == self.navsat_status.get('fix')):
-      self.gps_pub.publish(odom)
-    elif (self.sel_solutions == "float") and (data.status.status == self.navsat_status.get('float')): # is it needed?
-      self.gps_pub.publish(odom)
-    else:
-      print("Param Setting Error")
+    if rtk_mode == self.navsat_status.get('fix') or rtk_mode == self.navsat_status.get('float'):
+          self.gps_pub.publish(odom)
+
+    # if self.sel_solutions == "all":
+    #   self.gps_pub.publish(odom)
+    # elif (self.sel_solutions == "fix") and (data.status.status == self.navsat_status.get('fix')):
+    #   self.gps_pub.publish(odom)
+    # elif (self.sel_solutions == "float") and (data.status.status == self.navsat_status.get('float')): # is it needed?
+    #   self.gps_pub.publish(odom)
+    # else:
+    #   print("Param Setting Error")
 
 if __name__ == '__main__':
   rospy.init_node('gnss_to_map', anonymous=True)

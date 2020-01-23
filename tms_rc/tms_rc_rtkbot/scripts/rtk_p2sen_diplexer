@@ -7,35 +7,87 @@ from nav_msgs.msg import Odometry
 from sensor_msgs.msg import NavSatFix
 
 
-# 当然callbackに3つのTopicが入らないと動かないので注意
 class RtkP2senDiplexerClass:
     def __init__(self):
         # Params
         in_topic_p2sen = rospy.get_param('~in_topic_p2sen', 'ninebot_measured_pos')
-        in_topic_gps = rospy.get_param('~in_topic_gps', 'odometry/measured')
+        in_topic_gps = rospy.get_param('~in_topic_gps', 'odometry/measured_gps')
         in_topic_navsat = rospy.get_param('~in_topic_navsat', 'gnss_data')
-        out_topic_odom = rospy.get_param('~out_topic_odom', 'piyopiyo') # @FIXME
+        out_topic_odom = rospy.get_param('~out_topic_odom', 'odometry_measured')
 
         # Pub, Sub
-        self.sub_p2sen = message_filters.Subscriber(in_topic_p2sen, Odometry)
-        self.sub_gps = message_filters.Subscriber(in_topic_gps, Odometry)
-        self.sub_navsat = message_filters.Subscriber(in_topic_navsat, NavSatFix)
+        rospy.Subscriber(in_topic_p2sen, Odometry, self.p2sen_callback, queue_size=100)
+        rospy.Subscriber(in_topic_gps, Odometry, self.gps_callback, queue_size=100)
+        rospy.Subscriber(in_topic_navsat, NavSatFix, self.navsat_callback, queue_size=100)
         self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=100)
 
-        # Message Filters
-        ts = message_filters.ApproximateTimeSynchronizer(fs=[self.sub_p2sen, self.sub_gps, self.sub_navsat], queue_size=100, slop=5.0, allow_headerless=True)
-        ts.registerCallback(self.callback)
+        self.p2sen_odom = Odometry()
+        self.gps_odom = Odometry()
+        self.navsat = NavSatFix()
+        self.sensor = "gps"
+        self.non_rtk_cnt = 0
+        self.non_rtk_threash = 5 # 何回 Fix or Float 以外になったらP2-Senに切り替えるか
 
-    def callback(self, p2sen_odom, gps_odom, gps_navsat):
+        # Main
+        while not rospy.is_shutdown():
+            
+            # Decision
+            gps_status = self.navsat.status.status
+            if gps_status == -1 or gps_status == 0 or gps_status == 1:
+                self.non_rtk_cnt += 1
 
-        gps_status = gps_navsat.status.status
+            if self.non_rtk_cnt >= self.non_rtk_threash:
+                self.sensor = "p2sen"
 
-        # gps_x, gps_y = gps_odom.pose.pose.position.x, gps_odom.pose.pose.position.y
+            ## Publish
+            if sensor == "gps":
+                self.pub.publish(gps_odom)
+            elif sensor == "p2sen":
+                self.pub.publish(p2sen_odom)
+            else:
+                pass
 
-        if gps_status == 0 or gps_status == 1:  # Invalid or Autonomous
-            self.pub.publish(p2sen_odom)
-        else:
-            self.pub.publish(gps_odom)
+    def p2sen_callback(self, p2sen_data):
+        self.p2sen_odom = p2sen_data
+    
+    def gps_callback(self, gps_data):
+        self.gps_odom = gps_data
+
+    def navsat_callback(self, navsat_data):
+        self.navsat = navsat_data
+
+
+# Underconstruction
+
+# # 当然callbackに3つのTopicが入らないと動かないので注意
+# class RtkP2senDiplexerClass:
+#     def __init__(self):
+#         # Params
+#         in_topic_p2sen = rospy.get_param('~in_topic_p2sen', 'ninebot_measured_pos')
+#         in_topic_gps = rospy.get_param('~in_topic_gps', 'odometry/measured_gps')
+#         in_topic_navsat = rospy.get_param('~in_topic_navsat', 'gnss_data')
+#         out_topic_odom = rospy.get_param('~out_topic_odom', 'odometry_measured')
+
+#         # Pub, Sub
+#         self.sub_p2sen = message_filters.Subscriber(in_topic_p2sen, Odometry)
+#         self.sub_gps = message_filters.Subscriber(in_topic_gps, Odometry)
+#         self.sub_navsat = message_filters.Subscriber(in_topic_navsat, NavSatFix)
+#         self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=100)
+
+#         # Message Filters
+#         ts = message_filters.ApproximateTimeSynchronizer(fs=[self.sub_p2sen, self.sub_gps, self.sub_navsat], queue_size=100, slop=5.0, allow_headerless=True)
+#         ts.registerCallback(self.callback)
+
+#     def callback(self, p2sen_odom, gps_odom, gps_navsat):
+
+#         gps_status = gps_navsat.status.status
+
+#         # gps_x, gps_y = gps_odom.pose.pose.position.x, gps_odom.pose.pose.position.y
+
+#         if gps_status == 0 or gps_status == 1:  # Invalid or Autonomous
+#             self.pub.publish(p2sen_odom)
+#         else:
+#             self.pub.publish(gps_odom)
 
 
 if __name__ == '__main__':

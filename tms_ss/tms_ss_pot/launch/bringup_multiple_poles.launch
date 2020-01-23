@@ -1,5 +1,11 @@
 <launch>
-  <group ns="urg1">
+
+  <arg name="urg1" value="true"/>
+  <arg name="urg2" value="true"/>
+  <arg name="urg3" value="true"/>
+  <arg name="urg4" value="true"/>
+
+  <group ns="urg1" if="$(arg urg1)">
     <machine name="P2SEN-1" address="P2SEN-1" env-loader="/home/odroid/env.bash" user="odroid" password="odroid" timeout="30"/>
 
     <node machine="P2SEN-1" pkg="urg_node" name="urg_node" type="urg_node">
@@ -15,7 +21,7 @@
     </node> -->
   </group>
 
-  <group ns="urg2">
+  <group ns="urg2" if="$(arg urg2)">
     <machine name="P2SEN-2" address="P2SEN-2" env-loader="/home/odroid/env.bash" user="odroid" password="odroid" timeout="30"/>
 
     <node machine="P2SEN-2" pkg="urg_node" name="urg_node" type="urg_node">
@@ -31,7 +37,7 @@
     </node> -->
   </group>
 
-  <group ns="urg3">
+  <group ns="urg3" if="$(arg urg3)">
 
     <machine name="P2SEN-3" address="P2SEN-3" env-loader="/home/odroid/env.bash" user="odroid" password="odroid" timeout="30"/>
 
@@ -49,7 +55,7 @@
 
   </group>
 
-  <group ns="urg4">
+  <group ns="urg4" if="$(arg urg4)">
 
     <machine name="P2SEN-4" address="P2SEN-4" env-loader="/home/odroid/env.bash" user="odroid" password="odroid" timeout="30"/>
 
