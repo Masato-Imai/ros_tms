@@ -1,9 +1,9 @@
 <launch>
 
-  <arg name="urg1" value="true"/>
-  <arg name="urg2" value="true"/>
-  <arg name="urg3" value="true"/>
-  <arg name="urg4" value="true"/>
+  <arg name="urg1" default="true"/>
+  <arg name="urg2" default="true"/>
+  <arg name="urg3" default="true"/>
+  <arg name="urg4" default="true"/>
 
   <group ns="urg1" if="$(arg urg1)">
     <machine name="P2SEN-1" address="P2SEN-1" env-loader="/home/odroid/env.bash" user="odroid" password="odroid" timeout="30"/>
