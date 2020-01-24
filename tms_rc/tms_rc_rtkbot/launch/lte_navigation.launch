@@ -16,7 +16,7 @@
 
     <!-- file -->
     <arg name="place" value="map_coi_f1"/>
-    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/$(arg place)/map.yaml"/> 
+    <arg name="map_file" value="$(find tms_rc_rtkbot)/maps/$(arg place)/map_new.yaml"/> 
     <arg name="gnss_to_map_config_file" value="$(find tms_rc_rtkbot)/param/sensor/gnss_to_map/$(arg place).yaml"/>
     
     <arg name="velodyne_calibration_file" value="$(env HOME)/VLP16-HiRes.yaml"/>
@@ -191,7 +191,7 @@
         <param name="in_topic_p2sen" value="ninebot_measured_pos"/>
         <param name="in_topic_gps" value="odometry/measured_gps"/>
         <param name="in_topic_navsat" value="gnss_data"/>
-        <param name="out_topic_name" value="odometry_measured"/>
+        <param name="out_topic_name" value="odometry/measured"/>
     </node>
 
 </launch>

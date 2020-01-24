@@ -2,7 +2,6 @@
 # -*- coding:utf-8 -*-
 
 import rospy
-#import message_filters
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import NavSatFix
 
@@ -13,7 +12,7 @@ class RtkP2senDiplexerClass:
         in_topic_p2sen = rospy.get_param('~in_topic_p2sen', 'ninebot_measured_pos')
         in_topic_gps = rospy.get_param('~in_topic_gps', 'odometry/measured_gps')
         in_topic_navsat = rospy.get_param('~in_topic_navsat', 'gnss_data')
-        out_topic_odom = rospy.get_param('~out_topic_odom', 'odometry_measured')
+        out_topic_odom = rospy.get_param('~out_topic_odom', 'odometry/measured')
 
         # Pub, Sub
         rospy.Subscriber(in_topic_p2sen, Odometry, self.p2sen_callback, queue_size=100)
@@ -25,6 +24,8 @@ class RtkP2senDiplexerClass:
         self.p2sen_odom = Odometry()
         self.gps_odom = Odometry()
         self.navsat = NavSatFix()
+        self.p2sen_callback_called = False
+        self.gps_callback_called = False
         self.sensor = "gps"
         self.non_rtk_cnt = 0
         self.non_rtk_threash = 5 # 何回連続で Fix or Float 以外になったらP2-Senに切り替えるか
@@ -43,54 +44,23 @@ class RtkP2senDiplexerClass:
                 self.sensor = "p2sen"
 
             ## Publish
-            if sensor == "gps":
-                self.pub.publish(gps_odom)
-            elif sensor == "p2sen":
-                self.pub.publish(p2sen_odom)
+            if self.sensor == "gps" and self.gps_callback_called:
+                self.pub.publish(self.gps_odom)
+            elif self.sensor == "p2sen" and self.p2sen_callback_called:
+                self.pub.publish(self.p2sen_odom)
             else:
                 pass
 
     def p2sen_callback(self, p2sen_data):
         self.p2sen_odom = p2sen_data
+        self.p2sen_callback_called = True
     
     def gps_callback(self, gps_data):
         self.gps_odom = gps_data
+        self.p2sen_callback_called = True
 
     def navsat_callback(self, navsat_data):
         self.navsat = navsat_data
-
-
-# Underconstruction
-
-# # 当然callbackに3つのTopicが入らないと動かないので注意
-# class RtkP2senDiplexerClass:
-#     def __init__(self):
-#         # Params
-#         in_topic_p2sen = rospy.get_param('~in_topic_p2sen', 'ninebot_measured_pos')
-#         in_topic_gps = rospy.get_param('~in_topic_gps', 'odometry/measured_gps')
-#         in_topic_navsat = rospy.get_param('~in_topic_navsat', 'gnss_data')
-#         out_topic_odom = rospy.get_param('~out_topic_odom', 'odometry_measured')
-
-#         # Pub, Sub
-#         self.sub_p2sen = message_filters.Subscriber(in_topic_p2sen, Odometry)
-#         self.sub_gps = message_filters.Subscriber(in_topic_gps, Odometry)
-#         self.sub_navsat = message_filters.Subscriber(in_topic_navsat, NavSatFix)
-#         self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=100)
-
-#         # Message Filters
-#         ts = message_filters.ApproximateTimeSynchronizer(fs=[self.sub_p2sen, self.sub_gps, self.sub_navsat], queue_size=100, slop=5.0, allow_headerless=True)
-#         ts.registerCallback(self.callback)
-
-#     def callback(self, p2sen_odom, gps_odom, gps_navsat):
-
-#         gps_status = gps_navsat.status.status
-
-#         # gps_x, gps_y = gps_odom.pose.pose.position.x, gps_odom.pose.pose.position.y
-
-#         if gps_status == 0 or gps_status == 1:  # Invalid or Autonomous
-#             self.pub.publish(p2sen_odom)
-#         else:
-#             self.pub.publish(gps_odom)
 
 
 if __name__ == '__main__':

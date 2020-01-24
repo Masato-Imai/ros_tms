@@ -17,7 +17,7 @@
     <arg name="rtk_device_name" value="usb_rsaq5"/>
 
     <!-- Enable Nodes -->
-    <arg name="enable_nmea_navsat_driver" value="false"/>
+    <arg name="enable_nmea_navsat_driver" value="true"/>
     <arg name="enable_gnss_to_map" value="true"/>
     <arg name="enable_visualize" value="true"/>
 
