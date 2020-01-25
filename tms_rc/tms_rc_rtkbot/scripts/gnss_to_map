@@ -120,18 +120,8 @@ class GnssToMapClass:
 
     # Publish Topics
     self.marker_pub.publish(self.marker)
-
-    if rtk_mode == self.navsat_status.get('fix') or rtk_mode == self.navsat_status.get('float'):
-          self.gps_pub.publish(odom)
-
-    # if self.sel_solutions == "all":
-    #   self.gps_pub.publish(odom)
-    # elif (self.sel_solutions == "fix") and (data.status.status == self.navsat_status.get('fix')):
-    #   self.gps_pub.publish(odom)
-    # elif (self.sel_solutions == "float") and (data.status.status == self.navsat_status.get('float')): # is it needed?
-    #   self.gps_pub.publish(odom)
-    # else:
-    #   print("Param Setting Error")
+    self.gps_pub.publish(odom)
+    
 
 if __name__ == '__main__':
   rospy.init_node('gnss_to_map', anonymous=True)

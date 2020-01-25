@@ -33,13 +33,16 @@ class RtkP2senDiplexerClass:
         self.gps_callback_called = False
         ## 何回連続で Fix or Float 以外になったらP2-Senに切り替えるか
         self.non_rtk_cnt = 0
-        self.non_rtk_threash = 5 # 
+        self.non_rtk_threash = 5
 
         # Main
         while not rospy.is_shutdown():
             
             # Decision
             gps_status = self.navsat.status.status
+	        if gps_status == 2 or gps_status == 3:
+	            self.localization_method = "gps"
+
             if gps_status == -1 or gps_status == 0 or gps_status == 1:
                 self.non_rtk_cnt += 1
             elif gps_status == 2 or gps_status == 3:
