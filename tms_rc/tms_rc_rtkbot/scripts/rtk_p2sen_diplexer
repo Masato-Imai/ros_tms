@@ -4,6 +4,7 @@
 import rospy
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import NavSatFix
+from std_msgs.msg import Header
 
 
 class RtkP2senDiplexerClass:
@@ -19,16 +20,20 @@ class RtkP2senDiplexerClass:
         rospy.Subscriber(in_topic_gps, Odometry, self.gps_callback, queue_size=100)
         rospy.Subscriber(in_topic_navsat, NavSatFix, self.navsat_callback, queue_size=100)
         self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=100)
+        self.pub_localization_method = rospy.Publisher("diplexer_localization_method", Header, queue_size=100)
 
         # Var
         self.p2sen_odom = Odometry()
         self.gps_odom = Odometry()
         self.navsat = NavSatFix()
+        self.localization_method = "gps"
+
+        ## Callbackが1回でも呼ばれてるかどうか (データがあるか)
         self.p2sen_callback_called = False
         self.gps_callback_called = False
-        self.sensor = "gps"
+        ## 何回連続で Fix or Float 以外になったらP2-Senに切り替えるか
         self.non_rtk_cnt = 0
-        self.non_rtk_threash = 5 # 何回連続で Fix or Float 以外になったらP2-Senに切り替えるか
+        self.non_rtk_threash = 5 # 
 
         # Main
         while not rospy.is_shutdown():
@@ -41,15 +46,22 @@ class RtkP2senDiplexerClass:
                 self.non_rtk_cnt = 0
 
             if self.non_rtk_cnt == self.non_rtk_threash:
-                self.sensor = "p2sen"
+                self.localization_method = "p2sen"
+
+            localization_method_msg = Header()
+            localization_method_msg.stamp = rospy.Time.now()
 
             ## Publish
-            if self.sensor == "gps" and self.gps_callback_called:
+            if self.localization_method == "gps" and self.gps_callback_called:
                 self.pub.publish(self.gps_odom)
-            elif self.sensor == "p2sen" and self.p2sen_callback_called:
+                localization_method_msg.frame_id = "gps"
+            elif self.localization_method == "p2sen" and self.p2sen_callback_called:
                 self.pub.publish(self.p2sen_odom)
+                localization_method_msg.frame_id = "p2sen"
             else:
-                pass
+                localization_method_msg.frame_id = "None"
+            
+            self.pub_localization_method.publish(localization_method_msg)
 
     def p2sen_callback(self, p2sen_data):
         self.p2sen_odom = p2sen_data
