@@ -12,7 +12,7 @@
 
     <!-- Cropper -->
     <node pkg="tms_ss_pot" name="ninebot_cropper" type="ninebot_cropper" output="screen">
-        <param name="cropper_odom_topic_name" value="ninebot_odom"/>
+        <param name="cropper_odom_topic_name" value="/odometry/filtered"/>
     </node>
 
     <!-- Monitor -->

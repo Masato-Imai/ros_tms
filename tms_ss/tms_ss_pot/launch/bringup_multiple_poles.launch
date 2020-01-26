@@ -10,8 +10,8 @@
 
     <node machine="P2SEN-1" pkg="urg_node" name="urg_node" type="urg_node">
       <param name="ip_address" value="192.168.0.10"/>
-      <param name="angle_min" value="-1.832595714595"/>
-      <param name="angle_max" value=" 1.832595714595"/>
+      <param name="angle_min" value="-3.1415926535"/>
+      <param name="angle_max" value="3.1415926535"/>
       <remap from="/urg1/scan" to="/LaserTracker1"/>
     </node>
 
@@ -26,8 +26,8 @@
 
     <node machine="P2SEN-2" pkg="urg_node" name="urg_node" type="urg_node">
       <param name="ip_address" value="192.168.0.10"/>
-      <param name="angle_min" value="-1.832595714595"/>
-      <param name="angle_max" value=" 1.832595714595"/>
+      <param name="angle_min" value="-3.1415926535"/>
+      <param name="angle_max" value="3.1415926535"/>
       <remap from="/urg2/scan" to="/LaserTracker2"/>
     </node>
 
@@ -43,8 +43,8 @@
 
     <node machine="P2SEN-3" pkg="urg_node" name="urg_node" type="urg_node">
       <param name="ip_address" value="192.168.0.10"/>
-      <param name="angle_min" value="-1.832595714595"/>
-      <param name="angle_max" value=" 1.832595714595"/>
+      <param name="angle_min" value="-3.1415926535"/>
+      <param name="angle_max" value="3.1415926535"/>
       <remap from="/urg3/scan" to="/LaserTracker3"/>
     </node>
 
