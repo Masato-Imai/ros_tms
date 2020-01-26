@@ -40,16 +40,13 @@ class RtkP2senDiplexerClass:
             
             # Decision
             gps_status = self.navsat.status.status
-	        if gps_status == 2 or gps_status == 3:
-	            self.localization_method = "gps"
-
-            if gps_status == -1 or gps_status == 0 or gps_status == 1:
-                self.non_rtk_cnt += 1
-            elif gps_status == 2 or gps_status == 3:
+            if gps_status == 2 or gps_status == 3:
+                self.localization_method = "gps"
                 self.non_rtk_cnt = 0
-
-            if self.non_rtk_cnt == self.non_rtk_threash:
-                self.localization_method = "p2sen"
+            elif gps_status == -1 or gps_status == 0 or gps_status == 1:
+                self.non_rtk_cnt += 1
+                if self.non_rtk_cnt == self.non_rtk_threash:
+                    self.localization_method = "p2sen"
 
             localization_method_msg = Header()
             localization_method_msg.stamp = rospy.Time.now()
@@ -58,13 +55,17 @@ class RtkP2senDiplexerClass:
             if self.localization_method == "gps" and self.gps_callback_called:
                 self.pub.publish(self.gps_odom)
                 localization_method_msg.frame_id = "gps"
+                print("Odom Measured Source: GPS")
             elif self.localization_method == "p2sen" and self.p2sen_callback_called:
                 self.pub.publish(self.p2sen_odom)
                 localization_method_msg.frame_id = "p2sen"
+                print("Odom Measured Source: P2-Sen")
             else:
                 localization_method_msg.frame_id = "None"
-            
+                print("Odom Measured Source: None")
+
             self.pub_localization_method.publish(localization_method_msg)
+    
 
     def p2sen_callback(self, p2sen_data):
         self.p2sen_odom = p2sen_data
@@ -72,7 +73,7 @@ class RtkP2senDiplexerClass:
     
     def gps_callback(self, gps_data):
         self.gps_odom = gps_data
-        self.p2sen_callback_called = True
+        self.gps_callback_called = True
 
     def navsat_callback(self, navsat_data):
         self.navsat = navsat_data
