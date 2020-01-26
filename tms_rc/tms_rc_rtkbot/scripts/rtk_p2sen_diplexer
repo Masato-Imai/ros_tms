@@ -45,8 +45,9 @@ class RtkP2senDiplexerClass:
                 self.non_rtk_cnt = 0
             elif gps_status == -1 or gps_status == 0 or gps_status == 1:
                 self.non_rtk_cnt += 1
-                if self.non_rtk_cnt == self.non_rtk_threash:
-                    self.localization_method = "p2sen"
+
+            if self.non_rtk_cnt == self.non_rtk_threash:
+                self.localization_method = "p2sen"
 
             localization_method_msg = Header()
             localization_method_msg.stamp = rospy.Time.now()
