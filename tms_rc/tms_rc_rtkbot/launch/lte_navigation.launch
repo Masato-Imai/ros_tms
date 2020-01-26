@@ -22,7 +22,7 @@
     <arg name="velodyne_calibration_file" value="$(env HOME)/VLP16-HiRes.yaml"/>
 
     <!-- External I/O -->
-    <arg name="use_RTK-GNSS" value="false"/>
+    <arg name="use_RTK-GNSS" value="true"/>
     <arg name="use_Velodyne" value="true"/>
     <arg name="use_Ninebot_Serial" value="true"/>
     <arg name="rtk_device_name" value="usb_rsaq5"/>
@@ -92,8 +92,7 @@
 <!-- @ Move Base @ -->
     <arg name="move_base" default="true"/>
     <node pkg="move_base" type="move_base" name="move_base" respawn="false" output="screen" if="$(arg move_base)">
-        <remap from="odom"                            to="ninebot_odom"/>
-        <!-- <remap from="odom"                            to="/odometry/filtered"/>     -->
+        <remap from="odom"                            to="/odometry/filtered"/>
         <!-- <remap from="odom"                            to="/portable1/odom"/> -->
         <param name="global_costmap/global_frame"     value="$(arg global_frame)"/>
         <param name="global_costmap/robot_base_frame" value="$(arg base_frame)"/>
@@ -120,7 +119,7 @@
 
 <!-- @ Portable Position @ -->
     <node pkg="tms_rc_rtkbot" type="portable_position" name="portable_position" output="screen">
-        <param name="odom_topic_name" value="ninebot_odom"/>
+        <param name="odom_topic_name" value="/odometry/filtered"/>
         <param name="global_frame_id" value="$(arg global_frame)"/>
         <param name="base_frame_id"   value="$(arg base_frame)"/>
         <param name="marker_name"     value="ninebot"/>
@@ -181,10 +180,6 @@
         <param name="out_topic_name" value="odometry/measured_gps"/>
         <rosparam file="$(arg gnss_to_map_config_file)"/>
     </node>
-
-<!-- @ToDo -->
-<!-- p2senとgpsのodomからodometry_measuredを吐き出す -->
-<!-- p2senからのtopicが来ない時はgpsのみを吐き出すようにしなきゃいけない -->
 
 <!-- @ rtk_p2sen_diplexer @-->
    <node pkg="tms_rc_rtkbot" type="rtk_p2sen_diplexer" name="rtk_p2sen_diplexer" output="screen">

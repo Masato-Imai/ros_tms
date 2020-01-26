@@ -20,7 +20,7 @@ class RtkP2senDiplexerClass:
         rospy.Subscriber(in_topic_gps, Odometry, self.gps_callback, queue_size=100)
         rospy.Subscriber(in_topic_navsat, NavSatFix, self.navsat_callback, queue_size=100)
         self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=100)
-        self.pub_localization_method = rospy.Publisher("diplexer_localization_method", Header, queue_size=100)
+        self.pub_localization_method = rospy.Publisher("diplexer_localization_method", Header, queue_size=10ROS0)
 
         # Var
         self.p2sen_odom = Odometry()
