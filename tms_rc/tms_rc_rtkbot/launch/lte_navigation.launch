@@ -22,7 +22,7 @@
     <arg name="velodyne_calibration_file" value="$(env HOME)/VLP16-HiRes.yaml"/>
 
     <!-- External I/O -->
-    <arg name="use_RTK-GNSS" value="true"/>
+    <arg name="use_RTK-GNSS" value="false"/>
     <arg name="use_Velodyne" value="true"/>
     <arg name="use_Ninebot_Serial" value="true"/>
     <arg name="rtk_device_name" value="usb_rsaq5"/>

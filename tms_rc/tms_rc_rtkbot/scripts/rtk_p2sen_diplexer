@@ -55,14 +55,14 @@ class RtkP2senDiplexerClass:
             if self.localization_method == "gps" and self.gps_callback_called:
                 self.pub.publish(self.gps_odom)
                 localization_method_msg.frame_id = "gps"
-                print("Odom Measured Source: GPS")
+                #print("Odom Measured Source: GPS")
             elif self.localization_method == "p2sen" and self.p2sen_callback_called:
                 self.pub.publish(self.p2sen_odom)
                 localization_method_msg.frame_id = "p2sen"
-                print("Odom Measured Source: P2-Sen")
+                #print("Odom Measured Source: P2-Sen")
             else:
                 localization_method_msg.frame_id = "None"
-                print("Odom Measured Source: None")
+                #print("Odom Measured Source: None")
 
             self.pub_localization_method.publish(localization_method_msg)
     

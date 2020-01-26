@@ -106,17 +106,20 @@ class GnssToMapClass:
       self.marker.color.r = 0.0
       self.marker.color.g = 0.0
       self.marker.color.b = 1.0
-      print("Status: Fix")
+      print("GPS Status: Fix")
     elif rtk_mode == self.navsat_status.get('float'): # Float: Green
       self.marker.color.r = 0.0
       self.marker.color.g = 1.0
       self.marker.color.b = 0.0
-      print("Status: Float")
+      print("GPS Status: Float")
     else: # Else: Red
       self.marker.color.r = 1.0
       self.marker.color.g = 0.0
       self.marker.color.b = 0.0
-      print("Status: Autonomous")
+      if rtk_mode == 1:
+        print("GPS Status: Autonomous")
+      else:
+        print("GPS Status: Invalid")
 
     # Publish Topics
     self.marker_pub.publish(self.marker)
