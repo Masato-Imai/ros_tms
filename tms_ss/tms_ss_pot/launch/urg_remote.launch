@@ -2,8 +2,8 @@
     <!-- Urg Node (Remote) -->
     <include file="$(find tms_ss_pot)/launch/bringup_multiple_poles.launch">
         <arg name="urg1" value="true"/>
-        <arg name="urg2" value="true"/>
-        <arg name="urg3" value="true"/>
+        <arg name="urg2" value="false"/>
+        <arg name="urg3" value="false"/>
         <arg name="urg4" value="false"/>
     </include>
 
