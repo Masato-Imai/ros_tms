@@ -14,7 +14,7 @@ class GenerateMarkerClass:
         rospy.Subscriber(rospy.get_param('~people_position', 'people_ninebot_cropped'), People, self.callback_people, queue_size=1000)
         # Ninebot
         self.pub_marker_ninebot = rospy.Publisher(rospy.get_param('~ninebot_marker_topic_name', 'marker_ninebot'), Marker, queue_size=1000)
-        rospy.Subscriber(rospy.get_param('~ninebot_position', 'ninebot_odom'), Odometry, self.callback_ninebot, queue_size=1000)        
+        rospy.Subscriber(rospy.get_param('~ninebot_position', '/odometry/filtered'), Odometry, self.callback_ninebot, queue_size=1000)        
 
     def callback_people(self, data):
         marker_people = MarkerArray()
