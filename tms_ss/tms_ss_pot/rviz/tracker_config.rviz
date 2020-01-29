@@ -3,7 +3,8 @@ Panels:
     Help Height: 78
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Map1
       Splitter Ratio: 0.595133007
     Tree Height: 895
   - Class: rviz/Selection
@@ -69,7 +70,7 @@ Visualization Manager:
       Draw Behind: false
       Enabled: true
       Name: Map
-      Topic: /map
+      Topic: /map_local
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -110,13 +111,35 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
+        base_footprint:
+          Value: true
+        base_measured:
+          Value: true
+        base_scan:
+          Value: true
+        map:
+          Value: true
+        odom:
+          Value: true
+        velodyne:
+          Value: true
+        world_link:
+          Value: true
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        {}
+        world_link:
+          map:
+            base_measured:
+              {}
+            odom:
+              base_footprint:
+                base_scan:
+                  velodyne:
+                    {}
       Update Interval: 0
       Value: true
     - Class: rviz/Marker
