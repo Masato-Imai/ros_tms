@@ -47,7 +47,7 @@
     <!-- Velodyne Filter -->
     <node pkg="tms_rc_rtkbot" type="velodyne_filter" name="velodyne_filter" output="screen">
         <param name="ring_no_min" value="2"/>
-        <param name="ring_no_max" value="7"/>
+        <param name="ring_no_max" value="4"/>
         <param name="velodyne_topic_name" value="velodyne_points"/>
     </node>
 
