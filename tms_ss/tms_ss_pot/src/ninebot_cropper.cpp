@@ -31,6 +31,8 @@ void peopleCallback(const people_msgs::People &people_in){
   people_msgs::People people_out;
   people_out.header.frame_id = "/world_link";
 
+
+#if 1
   for(int i = 0; i < people_in.people.size(); ++i){
     people_msgs::Person person;
     person = people_in.people.at(i);
@@ -58,6 +60,51 @@ void peopleCallback(const people_msgs::People &people_in){
   pub_people.publish(people_out);
 
   if(mindist<MARGIN) pub_ninebot.publish(ninebot_measured_position);
+
+// 元のコードでうまく行かなかった時用
+#else
+  
+  int ninebot_idx = INT_MAX;
+
+  for(int i = 0; i < people_in.people.size(); ++i){
+  people_msgs::Person person;
+  person = people_in.people.at(i);
+
+  double dist = sqrt(pow(ninebot_pose.x - person.position.x, 2) + pow(ninebot_pose.y - person.position.y, 2));
+
+    if(GetInitPosition && dist < MARGIN){
+      if(mindist > dist){
+        mindist = dist;
+        ninebot_idx = i;
+      }
+    }
+  }
+
+  for(int j = 0; j < people_in.people.size(); ++j){
+    people_msgs::Person person_p;
+    person_p = people_in.people.at(j);
+
+    if(GetInitPosition && j == ninebot_idx){
+      ninebot_measured_position.header.frame_id = "/world_link";
+      ninebot_measured_position.header.stamp = ros::Time::now();
+      ninebot_measured_position.pose.pose.position.x = person_p.position.x;
+      ninebot_measured_position.pose.pose.position.y = person_p.position.y;
+      ninebot_measured_position.pose.pose.position.z = 0;
+      ninebot_measured_position.pose.pose.orientation.x = 0; 
+      ninebot_measured_position.pose.pose.orientation.y = 0;
+      ninebot_measured_position.pose.pose.orientation.z = 0; 
+      ninebot_measured_position.pose.pose.orientation.w = 1;
+    }else{
+      people_out.people.push_back(person_p);
+    }
+  }
+
+  pub_people.publish(people_out);
+
+  if(mindist < MARGIN) pub_ninebot.publish(ninebot_measured_position);
+
+#endif
+
 
 /*
   visualization_msgs::MarkerArray markerArray;
