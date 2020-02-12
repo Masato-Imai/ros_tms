@@ -4,7 +4,6 @@
 import rospy
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import NavSatFix
-from std_msgs.msg import Header
 
 
 class RtkP2senDiplexerClass:
@@ -20,7 +19,7 @@ class RtkP2senDiplexerClass:
         rospy.Subscriber(in_topic_gps, Odometry, self.gps_callback, queue_size=10)
         rospy.Subscriber(in_topic_navsat, NavSatFix, self.navsat_callback, queue_size=10)
         self.pub = rospy.Publisher(out_topic_odom, Odometry, queue_size=10)
-        self.pub_localization_method = rospy.Publisher("diplexer_localization_method", Header, queue_size=10)
+        self.pub_localization_method = rospy.Publisher("diplexer_localization_method", Odometry, queue_size=10)
 
         # Var
         self.p2sen_odom = Odometry()
@@ -49,18 +48,20 @@ class RtkP2senDiplexerClass:
             if self.non_rtk_cnt >= self.non_rtk_threash:
                 self.localization_method = "p2sen"
 
-            localization_method_msg = Header()
-            localization_method_msg.stamp = rospy.Time.now()
+            localization_method_msg = Odometry()
+            localization_method_msg.header.stamp = rospy.Time.now()
 
             ## Publish
             if self.localization_method == "gps" and self.gps_callback_called:
+                self.gps_odom.header.stamp = rospy.Time.now()
                 self.pub.publish(self.gps_odom)
-                localization_method_msg.frame_id = "gps"
+                localization_method_msg.header.frame_id = "gps"
             elif self.localization_method == "p2sen" and self.p2sen_callback_called:
+                self.p2sen_odom.header.stamp = rospy.Time.now()
                 self.pub.publish(self.p2sen_odom)
-                localization_method_msg.frame_id = "p2sen"
+                localization_method_msg.header.frame_id = "p2sen"
             else:
-                localization_method_msg.frame_id = "None"
+                localization_method_msg.header.frame_id = "None"
 
             self.pub_localization_method.publish(localization_method_msg)
     
