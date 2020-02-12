@@ -32,7 +32,6 @@
 
 <!-- Marker -->
     <!-- <node pkg="tms_rc_rtkbot" name="trajectory_visualize" type="trajectory_visualize" output="screen"/> -->
-    <!-- <node pkg="tms_rc_rtkbot" name="masters_thesis" type="masters_thesis" output="screen"/> -->
     <node pkg="tms_rc_rtkbot" name="generate_marker" type="generate_marker" output="screen"/>
 
 </launch>
