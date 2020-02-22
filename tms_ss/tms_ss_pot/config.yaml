@@ -32,4 +32,4 @@ lrf3_pos: #LRF3の座標(x, y, yaw[deg])
 lrf4_pos: #LRF4の座標(x, y, yaw[deg])
  [-1000.0, -1000.0, 0.0]
 lrf_active: # LRFを使用するかどうか
- [true, false, false, false]
+ [true, true, true, false]

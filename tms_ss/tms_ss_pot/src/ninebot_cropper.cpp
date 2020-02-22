@@ -32,7 +32,7 @@ void peopleCallback(const people_msgs::People &people_in){
   people_out.header.frame_id = "/world_link";
 
 
-#if 1
+#if 0
   for(int i = 0; i < people_in.people.size(); ++i){
     people_msgs::Person person;
     person = people_in.people.at(i);
