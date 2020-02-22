@@ -1,7 +1,0 @@
-<launch>
-  <node pkg="tms_rc_rtkbot" type="velodyne_filter" name="velodyne_filter" output="screen">
-    <param name="ring_no_min" value="0"/>
-    <param name="ring_no_max" value="9"/>
-    <param name="velodyne_topic_name" value="velodyne_points"/>
-  </node>
-</launch>

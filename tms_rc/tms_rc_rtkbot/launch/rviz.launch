@@ -1,6 +1,0 @@
-<launch>
-
-<!-- RViz -->
-<node name="rviz" pkg="rviz" type="rviz" args="-d $(find tms_rc_rtkbot)/rviz/rviz_cfg.rviz" respawn="true"/>
-
-</launch>

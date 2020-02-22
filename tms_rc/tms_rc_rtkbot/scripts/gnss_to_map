@@ -25,8 +25,8 @@ class GnssToMapClass:
     #self.offset_x = np.array([rospy.get_param('~offset_x', 0.)], dtype='float64')
     #self.offset_y = np.array([rospy.get_param('~offset_y', 0.)], dtype='float64')
 
-    self.offset_x = np.array([-1.89669847488], dtype='float64')
-    self.offset_y = np.array([2.8579647541], dtype='float64')
+    # self.offset_x = np.array([-1.89669847488], dtype='float64')
+    # self.offset_y = np.array([2.8579647541], dtype='float64')
 
     in_topic_name = rospy.get_param('~in_topic_name', '/fix')
     out_topic_name = rospy.get_param('~out_topic_name', 'odometry/measured')
@@ -83,13 +83,12 @@ class GnssToMapClass:
     odom.header.frame_id      = self.map_frame
     odom.child_frame_id       = self.odom_frame
 
-    ### Caution ###
-    if x == 0 and y == 0:
-      odom.pose.pose.position.x = x
-      odom.pose.pose.position.y = y
-    else:
-      odom.pose.pose.position.x = x - self.offset_x[0]
-      odom.pose.pose.position.y = y - self.offset_y[0]          
+    # if x == 0 and y == 0:
+    #   odom.pose.pose.position.x = x
+    #   odom.pose.pose.position.y = y
+    # else:
+    #   odom.pose.pose.position.x = x - self.offset_x[0]
+    #   odom.pose.pose.position.y = y - self.offset_y[0]          
 
     odom.pose.pose.position.z = 0.0
     odom.pose.pose.orientation.x = 0.0

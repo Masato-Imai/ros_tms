@@ -16,10 +16,6 @@ class GenerateMarkerClass:
         self.pub_marker_ninebot = rospy.Publisher(rospy.get_param('~ninebot_marker_topic_name', 'marker_ninebot'), Marker, queue_size=1000)
         rospy.Subscriber(rospy.get_param('~ninebot_position', '/odometry/filtered'), Odometry, self.callback_ninebot, queue_size=1000)        
 
-        self.pub_marker_debug = rospy.Publisher('debug_markerarray_people', MarkerArray, queue_size=1000)
-        rospy.Subscriber('people_p2sen', People, self.callback_debug, queue_size=1000)        
-
-
     def callback_people(self, data):
         marker_people = MarkerArray()
         person_id = 10
