@@ -30,21 +30,22 @@ class GenerateMarkerClass:
             marker_person.header.stamp = rospy.Time.now()
             person_id += 1
             marker_person.id = person_id
-            marker_person.type = 10 # Mesh
+            marker_person.type = 3
             marker_person.action = 0 # Add
             marker_person.lifetime = rospy.Duration(0.5)
 
-            marker_person.scale.x = 0.025
-            marker_person.scale.y = 0.025
-            marker_person.scale.z = 0.025
+            marker_person.color.r         = 1.0
+            marker_person.color.g         = 0.0
+            marker_person.color.b         = 0.0
+            marker_person.color.a         = 1.0
+            marker_person.scale.x = 0.2
+            marker_person.scale.y = 0.2
+            marker_person.scale.z = 1.0
             marker_person.pose.position = p.position
             marker_person.pose.orientation.x = 0
             marker_person.pose.orientation.y = 0
             marker_person.pose.orientation.z = 0
             marker_person.pose.orientation.w = 1
-
-            marker_person.mesh_resource = "package://tms_ss_pot/meshes/WalkingMan4.dae"
-            marker_person.mesh_use_embedded_materials = True
 
             marker_people.markers.append(marker_person)
         
@@ -79,21 +80,22 @@ class GenerateMarkerClass:
             marker_person.header.stamp = rospy.Time.now()
             person_id += 1
             marker_person.id = person_id
-            marker_person.type = 10 # Mesh
+            marker_person.type = 3
             marker_person.action = 0 # Add
             marker_person.lifetime = rospy.Duration(0.5)
 
-            marker_person.scale.x = 0.025
-            marker_person.scale.y = 0.025
-            marker_person.scale.z = 0.025
+            marker_person.color.r         = 0.0
+            marker_person.color.g         = 1.0
+            marker_person.color.b         = 0.0
+            marker_person.color.a         = 1.0
+            marker_person.scale.x = 0.2
+            marker_person.scale.y = 0.2
+            marker_person.scale.z = 1.0
             marker_person.pose.position = p.position
             marker_person.pose.orientation.x = 0
             marker_person.pose.orientation.y = 0
             marker_person.pose.orientation.z = 0
             marker_person.pose.orientation.w = 1
-
-            marker_person.mesh_resource = "package://tms_ss_pot/meshes/WalkingMan4.dae"
-            marker_person.mesh_use_embedded_materials = True
 
             marker_people.markers.append(marker_person)
         

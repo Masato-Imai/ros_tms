@@ -18,7 +18,7 @@ global_costmap:
   inflation_layer:
     enabled:               true
     cost_scaling_factor:   10.0     # コスト関数の定数(default: 10)
-    inflation_radius:      0.5      # コストのグラデーションの最外部の半径
+    inflation_radius:      20      # コストのグラデーションの最外部の半径
 
 
 local_costmap:

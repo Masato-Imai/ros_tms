@@ -22,8 +22,11 @@ class GnssToMapClass:
     self.scale_offset = np.array([rospy.get_param('~scale_offset', 1.)], dtype='float64')
     self.sel_solutions = rospy.get_param('~sel_solutions', "fix")
 
-    self.offset_x = np.array([rospy.get_param('~offset_x', 0.)], dtype='float64')
-    self.offset_y = np.array([rospy.get_param('~offset_y', 0.)], dtype='float64')
+    #self.offset_x = np.array([rospy.get_param('~offset_x', 0.)], dtype='float64')
+    #self.offset_y = np.array([rospy.get_param('~offset_y', 0.)], dtype='float64')
+
+    self.offset_x = np.array([-1.89669847488], dtype='float64')
+    self.offset_y = np.array([2.8579647541], dtype='float64')
 
     in_topic_name = rospy.get_param('~in_topic_name', '/fix')
     out_topic_name = rospy.get_param('~out_topic_name', 'odometry/measured')

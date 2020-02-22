@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+import rospy
+
+from nav_msgs.msg import Odometry
+from std_msgs.msg import Header
+from visualization_msgs.msg import Marker, MarkerArray
+import message_filters
+import sys
+
+editable = True
+
+def callback(data_odom):
+    global editable
+    marker.header.stamp = rospy.Time.now()
+    marker.id += 1
+    marker.pose = data_odom.pose.pose
+
+    mode = -1
+
+    if marker.pose.position.x > -6.46770689183 and marker.pose.position.y > -8.72932045055:
+        mode = 0 # GPS
+    elif marker.pose.position.y > 0:
+        mode = 0
+    else:
+        mode = 1
+
+
+    # if marker.pose.position.x > -6.46770689183 and marker.pose.position.y > -8.72932045055:
+    #     mode = 0 # GPS
+    # else:
+    #     mode = 1
+
+    # elif marker.pose.position.x < -10.4359460666:
+    #     mode = 1 # None
+    # else:
+    #     mode = 2 # P2SEN
+
+    if mode == 0:
+        # Magenta
+        marker.color.r = 0.8941
+        marker.color.g = 0.0000
+        marker.color.b = 0.4980
+    elif mode == 1:
+        # Cyan
+        marker.color.r = 0.1294
+        marker.color.g = 0.6157
+        marker.color.b = 0.8667
+    
+    elif mode == 2: 
+        # Red
+        marker.color.r = 1.0
+        marker.color.g = 0.0
+        marker.color.b = 0.0
+    else:
+        # Default : Black
+        marker.color.r = 0.0
+        marker.color.g = 0.0
+        marker.color.b = 0.0
+
+    pub_marker.publish(marker)
+
+if __name__ == '__main__':
+    try:
+        # Init Node
+        rospy.init_node("masters_thesis", anonymous=True)
+
+        # Pub
+        pub_marker = rospy.Publisher('/master_marker', Marker, queue_size=100)
+        marker = Marker()
+        marker.header.frame_id = "/world_link"
+        marker.id = 0
+        marker.type = 3 #cylinder
+        marker.action = 0 #add
+        marker.scale.x = 0.2
+        marker.scale.y = 0.2
+        marker.scale.z = 1.0
+        marker.color.a = 1.0
+        marker.lifetime = rospy.Duration(0)
+
+        sub = rospy.Subscriber('/odometry/filtered', Odometry, callback, queue_size=10)
+
+        # Sub
+        # odom_sub = message_filters.Subscriber('/odometry/filtered', Odometry)
+        # method_sub = message_filters.Subscriber('/dummy', Odometry)
+
+        # dummy_sub = rospy.Subscriber('/diplexer_localization_method', Header, dummy_callback)
+
+        # # Filter
+        # ts = message_filters.ApproximateTimeSynchronizer(fs=[odom_sub, method_sub], queue_size=100, slop=10.0, allow_headerless=True)
+        # ts.registerCallback(callback)
+
+        rospy.spin()
+
+    except rospy.ROSInterruptException: pass
